@@ -49,7 +49,7 @@ if('serviceWorker' in navigator){
   --tex:#D4E0F0;--t2:#8FA8C8;--t3:#506080;
   --bdr:#2D3F55;--sh:0 2px 12px rgba(0,0,0,.3);
 }
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 html{height:100%;height:-webkit-fill-available;overflow:hidden}
 body{font-family:var(--fb);background:var(--bg);color:var(--tex);width:100%;max-width:100%;margin:0 auto;position:relative;transition:background .3s,color .3s;height:100%;height:-webkit-fill-available;overflow:hidden}
 .scr{display:none;position:fixed;top:0;left:0;right:0;bottom:var(--nav);flex-direction:column;overflow:hidden}.scr.on{display:flex}
@@ -61,7 +61,7 @@ body{font-family:var(--fb);background:var(--bg);color:var(--tex);width:100%;max-
 .hbtn{width:32px;height:32px;border-radius:8px;background:var(--surf2);border:1.5px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:background .15s}
 .hbtn:active{background:var(--bdr)}
 .hacts{display:flex;gap:6px}
-.body{flex:1;min-height:0;overflow-y:auto;padding:14px 16px 0;-webkit-overflow-scrolling:touch}
+.body{flex:1;min-height:0;overflow-y:auto;padding:14px 16px 0;-webkit-overflow-scrolling:touch;contain:layout style;}
 .nav-spacer{display:block;height:calc(var(--nav) + 24px);width:100%;flex-shrink:0}
 .bnav{position:fixed;bottom:0;left:0;right:0;width:100%;height:var(--nav);background:var(--surf);border-top:1.5px solid var(--bdr);display:flex;align-items:center;justify-content:space-around;padding:0 4px 5px;z-index:100;box-shadow:0 -2px 12px rgba(44,74,124,.07)}
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 4px;border-radius:8px;cursor:pointer;border:none;background:transparent;transition:background .15s}
@@ -143,17 +143,25 @@ body{font-family:var(--fb);background:var(--bg);color:var(--tex);width:100%;max-
 .ba{background:var(--amb);color:#fff}
 .br{background:var(--cor);color:#fff}
 .bsm{width:auto;padding:5px 10px;font-size:11px;border-radius:7px}
-.fab{position:fixed;bottom:calc(var(--nav)+12px);right:12px;width:50px;height:50px;border-radius:14px;background:var(--blue);border:none;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:22px;color:#fff;box-shadow:0 4px 16px rgba(44,74,124,.3);transition:transform .2s;z-index:99}
+.fab{position:fixed;bottom:calc(var(--nav)+12px);right:12px;width:50px;height:50px;border-radius:14px;background:var(--blue);border:none;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:22px;color:#fff;box-shadow:0 4px 16px rgba(44,74,124,.3);transition:transform .2s;z-index:99;will-change:transform;}
 .scr.on .fab{display:flex}
 .fab:active{transform:scale(.91)}
-.mo{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);align-items:flex-end;justify-content:center}
+.mo{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);align-items:flex-end;justify-content:center;will-change:opacity;}
 .mo.on{display:flex;animation:fadeIn .18s}
-.ms{width:100%;max-width:600px;background:var(--surf);border-radius:20px 20px 0 0;padding:16px 15px 32px;animation:slideUp .25s cubic-bezier(.32,.72,0,1);max-height:92vh;overflow-y:auto}
+.ms{width:100%;max-width:600px;background:var(--surf);border-radius:20px 20px 0 0;padding:16px 15px 32px;animation:slideUp .25s cubic-bezier(.32,.72,0,1);max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .ms::-webkit-scrollbar{display:none}
 .mh{width:34px;height:4px;background:var(--bdr);border-radius:4px;margin:0 auto 14px}
 .mt{font-family:var(--fh);font-weight:700;font-size:17px;color:var(--tex);margin-bottom:14px}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important;}
+}
+@media(max-width:400px){
+  .ms{animation-duration:.15s!important;}
+  .pp-sh{animation-duration:.15s!important;}
+  .lp-sh{animation-duration:.15s!important;}
+}
 .tw{display:flex;background:var(--surf2);border-radius:8px;padding:3px;margin-bottom:12px}
 .tb{flex:1;padding:6px;border-radius:6px;border:none;background:transparent;font-family:var(--fh);font-weight:700;font-size:12px;color:var(--t3);cursor:pointer;transition:all .2s}
 .tb.on{background:var(--surf);color:var(--navy);box-shadow:0 1px 4px rgba(44,74,124,.1)}
@@ -196,7 +204,7 @@ body{font-family:var(--fb);background:var(--bg);color:var(--tex);width:100%;max-
 .ban-v{font-family:var(--fh);font-weight:700;font-size:15px}
 .ban-l{font-size:10px;opacity:.7;font-weight:600;margin-top:1px}
 /* QUICK ACTIONS */
-.qg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:11px}
+.qg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:11px;grid-auto-rows:auto}
 .qb{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 2px 6px;border-radius:10px;background:var(--surf);border:1.5px solid var(--bdr);cursor:pointer;transition:all .15s;box-shadow:0 1px 4px rgba(44,74,124,.05)}
 .qb:active{background:var(--surf2);transform:scale(.95)}
 .qi{font-size:18px}.ql{font-size:9px;font-weight:700;color:var(--t2);text-align:center;line-height:1.2}
@@ -294,6 +302,8 @@ input:checked+.tsl:before{transform:translateX(20px)}
       <div class="qb" onclick="openDelModal()"><div class="qi">📦</div><div class="ql">Log Entry</div></div>
       <div class="qb" onclick="goTo('s-collect')"><div class="qi">💳</div><div class="ql">Collect Pay</div></div>
       <div class="qb" onclick="openWalkInModal()"><div class="qi">🚶</div><div class="ql">Walk-in</div></div>
+      <div class="qb" onclick="openLoanModal()"><div class="qi">🏦</div><div class="ql">Add Loan</div></div>
+      <div class="qb" onclick="openUdhariModal()"><div class="qi">🛒</div><div class="ql">Udhari</div></div>
       <div class="qb" onclick="goTo('s-bulk')"><div class="qi">⭐</div><div class="ql">Bulk Buyers</div></div>
       <div class="qb" onclick="goTo('s-exp')"><div class="qi">📊</div><div class="ql">Expenses</div></div>
     </div>
@@ -311,6 +321,9 @@ input:checked+.tsl:before{transform:translateX(20px)}
       <div class="sc co" style="cursor:pointer" onclick="goTo('s-collect')"><div class="sic">⏳</div><div class="sv" id="d-overdue">0</div><div class="sl">With Dues</div></div>
       <div class="sc pu" style="cursor:pointer" onclick="goTo('s-exp')"><div class="sic">💸</div><div class="sv" id="d-exp-mon">₹0</div><div class="sl">Expenses</div></div>
     </div>
+    <div class="sg" style="margin-top:8px">
+      <div class="sc gr" style="grid-column:span 2;cursor:pointer" onclick="showTotalBalanceBreakdown()"><div class="sic">🏦</div><div class="sv" id="d-total-balance">₹0</div><div class="sl">Total Balance ↗</div></div>
+    </div>
     <!-- Billing Transparency Card -->
     <div class="sh" style="margin-top:11px"><div class="st">📊 Billing Breakdown</div><div id="d-adj-badge" style="font-size:11px;font-weight:700;display:none"></div></div>
     <div class="card cp" id="d-billing-breakdown" style="margin-bottom:10px"></div>
@@ -320,6 +333,8 @@ input:checked+.tsl:before{transform:translateX(20px)}
       <div class="sa" onclick="openWalkInModal()">➕ New</div>
     </div>
     <div class="card" id="d-walkin-list"></div>
+    <!-- Liabilities (Loans + Udhari) -->
+    <div id="d-loan-liability" style="background:var(--surf);border-radius:var(--r);border:1.5px solid var(--bdr);padding:11px 13px;margin-bottom:10px;margin-top:11px;display:none"></div>
     <!-- Top Expense Categories -->
     <div class="sh" style="margin-top:11px"><div class="st">Expense Categories</div><div class="sa" onclick="goTo('s-exp')">See all →</div></div>
     <div class="card" id="d-exp-cats"></div>
@@ -465,6 +480,20 @@ input:checked+.tsl:before{transform:translateX(20px)}
     <div id="exp-cat-list"></div>
     <div class="sh" style="margin-top:10px"><div class="st">Miscellaneous</div></div>
     <div class="card" id="exp-misc-list"></div>
+
+    <!-- Udhari Section in Expenses -->
+    <div class="sh" style="margin-top:12px">
+      <div class="st">🛒 Udhari (Credit Purchases)</div>
+      <div class="sa" onclick="openUdhariModal()">➕ Add</div>
+    </div>
+    <div id="exp-udhari-summary" style="margin-bottom:10px"></div>
+
+    <!-- Loans Section in Expenses -->
+    <div class="sh" style="margin-top:8px">
+      <div class="st">🏦 Loans / Personal Funds</div>
+      <div class="sa" onclick="openLoanModal()">➕ Add</div>
+    </div>
+    <div id="exp-loan-summary" style="margin-bottom:10px"></div>
   
     <div class="nav-spacer"></div></div>
   <button class="fab" onclick="openExpModal()">＋</button>
@@ -675,7 +704,7 @@ input:checked+.tsl:before{transform:translateX(20px)}
       </div>
     </div>
     <div class="pp-row" onclick="openLifetimeStats()">
-      <div><div class="pp-label">📊 Lifetime Stats</div><div class="pp-sub">All-time sales, earnings & profit</div></div>
+      <div><div class="pp-label">📊 Lifetime Stats</div><div class="pp-sub">All-time income, expenses & balance</div></div>
       <span style="color:var(--t3)">→</span>
     </div>
     <div class="pp-row" onclick="exportData();closeProfile()">
@@ -800,6 +829,9 @@ input:checked+.tsl:before{transform:translateX(20px)}
     <div class="card" style="margin-bottom:10px" id="det-del-list"></div>
     <!-- Paneer this month -->
     <div id="det-pnr-sec"></div>
+    <!-- Barter / Purchases from consumer -->
+    <div class="sh"><div class="st">🔄 Barter / Deductions</div><div class="sa" onclick="openConsBarterModal(curDetId)">➕ Add</div></div>
+    <div class="card" style="margin-bottom:10px" id="det-barter-list"></div>
     <!-- Attendance -->
     <div class="card" style="margin-bottom:10px" id="det-absent-sec"></div>
     <!-- Previous months history -->
@@ -1424,6 +1456,93 @@ input:checked+.tsl:before{transform:translateX(20px)}
 </div></div>
 
 
+<!-- ═══ LOAN MODAL ═══ -->
+<div class="mo" id="m-loan"><div class="ms">
+  <div class="mh"></div>
+  <div class="mt">🏦 Record Loan / Personal Fund</div>
+  <div style="background:var(--bxl);border:1.5px solid var(--bdr);border-radius:var(--rs);padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--t2);line-height:1.6">
+    💡 Record personal money added to dairy funds. This is a <b>liability</b> — money that needs to be repaid, not income.
+  </div>
+  <div class="fr">
+    <div class="fg"><label class="fl">Amount (₹) *</label><input class="fi" id="loan-amt" type="number" placeholder="5000" min="1"></div>
+    <div class="fg"><label class="fl">Date *</label><input class="fi" id="loan-date" type="date"></div>
+  </div>
+  <div class="fg"><label class="fl">From / Source</label><input class="fi" id="loan-source" placeholder="e.g. Personal savings, Family..."></div>
+  <div class="fg"><label class="fl">Note</label><input class="fi" id="loan-note" placeholder="e.g. Emergency feed purchase, milk van repair..."></div>
+  <div class="fg"><label class="fl">Status</label>
+    <select class="fi fsel" id="loan-status">
+      <option value="pending">⏳ Pending repayment</option>
+      <option value="partial">🔄 Partially repaid</option>
+      <option value="cleared">✅ Cleared</option>
+    </select>
+  </div>
+  <div class="fr" style="margin-top:2px">
+    <button class="btn bs" onclick="closeM('m-loan')" style="flex:1">Cancel</button>
+    <button class="btn bp" onclick="saveLoan()" style="flex:2">💾 Record Loan</button>
+  </div>
+  <!-- Loan list -->
+  <div class="sh" style="margin-top:14px"><div class="st">Loan History</div><div id="loan-total" style="font-size:11px;font-weight:700;color:var(--cor)"></div></div>
+  <div id="loan-list" style="margin-top:4px"></div>
+</div></div>
+
+<!-- ═══ UDHARI MODAL ═══ -->
+<div class="mo" id="m-udhari"><div class="ms">
+  <div class="mh"></div>
+  <div class="mt">🛒 Udhari (Credit Purchase)</div>
+  <div style="background:var(--axl);border:1.5px solid var(--bdr);border-radius:var(--rs);padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--t2);line-height:1.6">
+    💡 Record material bought on credit. Enter total MRP and amount paid — remaining is auto-calculated.
+  </div>
+  <div class="fg"><label class="fl">Material Name *</label><input class="fi" id="ud-name" placeholder="e.g. Kutti 5 bags, Concentrate 2 bags..."></div>
+  <div class="fr">
+    <div class="fg"><label class="fl">Total MRP (₹) *</label><input class="fi" id="ud-mrp" type="number" placeholder="3000" oninput="calcUdhariRemaining()"></div>
+    <div class="fg"><label class="fl">Paid Now (₹)</label><input class="fi" id="ud-paid" type="number" placeholder="0" oninput="calcUdhariRemaining()"></div>
+  </div>
+  <div class="fg">
+    <label class="fl">Remaining to Pay (₹) — auto</label>
+    <input class="fi" id="ud-remaining" type="number" readonly style="background:var(--surf2);color:var(--cor);font-weight:700" placeholder="—">
+  </div>
+  <div class="fr">
+    <div class="fg"><label class="fl">Date *</label><input class="fi" id="ud-date" type="date"></div>
+    <div class="fg"><label class="fl">Supplier</label><input class="fi" id="ud-supplier" placeholder="Optional"></div>
+  </div>
+  <div class="fr" style="margin-top:2px">
+    <button class="btn bs" onclick="closeM('m-udhari')" style="flex:1">Cancel</button>
+    <button class="btn ba" onclick="saveUdhari()" style="flex:2">💾 Record Udhari</button>
+  </div>
+  <!-- Pending udhari list -->
+  <div class="sh" style="margin-top:14px">
+    <div class="st">Pending Udhari</div>
+    <div id="ud-pending-total" style="font-size:11px;font-weight:700;color:var(--cor)"></div>
+  </div>
+  <div id="ud-list" style="margin-top:4px"></div>
+</div></div>
+
+<!-- Consumer Barter / Purchase Modal -->
+<div class="mo" id="m-cons-barter"><div class="ms">
+  <div class="mh"></div>
+  <div class="mt" id="cons-barter-title">🔄 Barter / Deduction</div>
+  <input type="hidden" id="cb-cid">
+  <div style="background:var(--bxl);border:1.5px solid var(--bdr);border-radius:var(--rs);padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--t2);line-height:1.6">
+    💡 Record items <b>you bought from</b> this consumer (e.g. vegetables, goods). Choose <b>Deduct from bill</b> to reduce their milk dues. If deduction exceeds their bill, the excess credit carries forward to next month.
+  </div>
+  <div class="fg"><label class="fl">Item / Description *</label><input class="fi" id="cb-desc" placeholder="e.g. Vegetables, Goods, Labour..."></div>
+  <div class="fr">
+    <div class="fg"><label class="fl">Amount (₹) *</label><input class="fi" id="cb-amt" type="number" placeholder="0" min="1"></div>
+    <div class="fg"><label class="fl">Date *</label><input class="fi" id="cb-dt" type="date"></div>
+  </div>
+  <div class="fg"><label class="fl">Mode</label>
+    <select class="fi fsel" id="cb-mode">
+      <option value="deduct">🔄 Deduct from milk bill</option>
+      <option value="cash">💵 Paid in cash (no deduction)</option>
+    </select>
+  </div>
+  <div class="fg"><label class="fl">Notes</label><input class="fi" id="cb-note" placeholder="Optional details..."></div>
+  <div style="display:flex;gap:7px;margin-top:2px">
+    <button class="btn bs" onclick="closeM('m-cons-barter')" style="flex:1">Cancel</button>
+    <button class="btn bp" onclick="saveConsBarter()" style="flex:2">💾 Save</button>
+  </div>
+</div></div>
+
 <!-- Cow Monthly Archive Modal -->
 <div class="mo" id="m-cow-archive"><div class="ms">
   <div class="mh"></div>
@@ -1538,13 +1657,29 @@ input:checked+.tsl:before{transform:translateX(20px)}
   <div class="mh"></div>
   <div class="mt">📊 Lifetime Overview</div>
 
-  <!-- Profit hero -->
+  <!-- Total Balance hero -->
   <div id="lt-profit-card" style="border-radius:var(--r);padding:16px;margin-bottom:12px;text-align:center;background:var(--gxl);border:2px solid var(--grn)">
-    <div style="font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px">Net Profit (All Time)</div>
+    <div style="font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px">Total Balance (All Time)</div>
     <div id="lt-profit" style="font-family:var(--fh);font-weight:700;font-size:34px;color:var(--grn)">₹0</div>
-    <div style="display:flex;justify-content:center;gap:28px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(0,0,0,.07)">
-      <div><div style="font-size:9px;color:var(--t3);font-weight:700">INCOME</div><div id="lt-income" style="font-family:var(--fh);font-weight:700;font-size:15px;color:var(--grn)">₹0</div></div>
-      <div><div style="font-size:9px;color:var(--t3);font-weight:700">EXPENSES</div><div id="lt-expenses" style="font-family:var(--fh);font-weight:700;font-size:15px;color:var(--cor)">₹0</div></div>
+    <div style="font-size:10px;color:var(--t3);margin-bottom:8px">Dairy Income + Loans Received − Expenses − Repayments</div>
+    <!-- Inflows -->
+    <div style="display:flex;justify-content:center;gap:18px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(0,0,0,.07);flex-wrap:wrap">
+      <div><div style="font-size:9px;color:var(--t3);font-weight:700">🥛 DAIRY INCOME</div><div id="lt-income" style="font-family:var(--fh);font-weight:700;font-size:15px;color:var(--grn)">₹0</div></div>
+      <div><div style="font-size:9px;color:var(--t3);font-weight:700">🏦 LOANS IN</div><div id="lt-loans-in" style="font-family:var(--fh);font-weight:700;font-size:15px;color:var(--blue)">₹0</div></div>
+    </div>
+    <!-- Outflows -->
+    <div style="display:flex;justify-content:center;gap:18px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(0,0,0,.07);flex-wrap:wrap">
+      <div><div style="font-size:9px;color:var(--t3);font-weight:700">💸 EXPENSES</div><div id="lt-expenses" style="font-family:var(--fh);font-weight:700;font-size:15px;color:var(--cor)">₹0</div></div>
+      <div><div style="font-size:9px;color:var(--t3);font-weight:700">🔄 LOANS REPAID</div><div id="lt-loans-repaid" style="font-family:var(--fh);font-weight:700;font-size:15px;color:var(--cor)">₹0</div></div>
+      <div><div style="font-size:9px;color:var(--t3);font-weight:700">🛒 UDHARI PAID</div><div id="lt-udhari-paid" style="font-family:var(--fh);font-weight:700;font-size:15px;color:var(--amb)">₹0</div></div>
+    </div>
+    <!-- Outstanding liabilities -->
+    <div id="lt-liabilities-row" style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,0,0,.07);display:none">
+      <div style="font-size:9px;color:var(--cor);font-weight:700;margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px">⚠️ Outstanding Liabilities (not yet paid)</div>
+      <div style="display:flex;justify-content:center;gap:18px;flex-wrap:wrap">
+        <div id="lt-loan-due-wrap"><div style="font-size:9px;color:var(--t3);font-weight:700">LOAN DUE</div><div id="lt-loan-due" style="font-family:var(--fh);font-weight:700;font-size:13px;color:var(--cor)">₹0</div></div>
+        <div id="lt-udhari-due-wrap"><div style="font-size:9px;color:var(--t3);font-weight:700">UDHARI DUE</div><div id="lt-udhari-due" style="font-family:var(--fh);font-weight:700;font-size:13px;color:var(--amb)">₹0</div></div>
+      </div>
     </div>
   </div>
 
@@ -1713,13 +1848,27 @@ input:checked+.tsl:before{transform:translateX(20px)}
 // ══════════════════════════════════════
 const DB='dmp_v5';
 
-function save(){
+// Raw write — only called by debounced save
+function _writeToDisk(){
   try{
     localStorage.setItem(DB,JSON.stringify(S));
     updateStorageBar();
   }catch(e){
     toast('⚠️ Storage full! Export backup now.');
   }
+}
+let _saveTimer = null;
+function save(){
+  invalidateCache(); // bust computed balances immediately
+  // Debounce disk write: batch rapid successive saves into one write
+  if(_saveTimer) clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(()=>{ _writeToDisk(); _saveTimer=null; }, 300);
+}
+// Force immediate disk write (used before app close / export)
+function saveImmediate(){
+  if(_saveTimer){ clearTimeout(_saveTimer); _saveTimer=null; }
+  invalidateCache();
+  _writeToDisk();
 }
 function load(){
   try{
@@ -1748,11 +1897,13 @@ function updateStorageBar(rawLen){
 }
 let S={
   consumers:[],deliveries:[],paneerSales:[],
-  bulkBuyers:[],bulkPayments:[],buyerPurchases:[],
+  bulkBuyers:[],bulkPayments:[],buyerPurchases:[],consPurchases:[],
   payments:[],manualDues:[],openingBalances:{},
   cows:[],cowProduction:{},cowFatLogs:[],cowEvents:[],cowHistory:[],cowMonthly:[],lacPeriods:[],
   gpsTrips:[],gpsArchive:{},
   walkInSales:[],
+  loans:[],       // personal money put into dairy — liabilities to repay
+  udhari:[],      // credit purchases (material bought on credit)
   expenses:[],expArchive:{},expKeywords:['kutti','diesel','vet','fodder','medicine','electricity'],
   profile:{name:'Dairy Operator',darkMode:false,driveConnected:false,driveEmail:'',driveToken:'',driveLastBackup:'',driveAutoBackup:false}
 };
@@ -1761,12 +1912,15 @@ migrateDeliveryData();
 migratePaymentTypes();
 if(!S.bulkPayments)S.bulkPayments=[];
 if(!S.buyerPurchases)S.buyerPurchases=[];
+if(!S.consPurchases)S.consPurchases=[];
 if(!S.manualDues)S.manualDues=[];
 if(!S.openingBalances)S.openingBalances={};// {consumerId: {amt, note}, bulkId: {amt, note}}
 if(!S.cowFatLogs)S.cowFatLogs=[];
   if(!S.cowEvents)S.cowEvents=[];
 if(!S.cowHistory)S.cowHistory=[];
 if(!S.cowMonthly)S.cowMonthly=[];
+if(!S.loans)S.loans=[];
+if(!S.udhari)S.udhari=[];
 if(!S.expenses)S.expenses=[];
 if(!S.expKeywords)S.expKeywords=['kutti','diesel','vet','fodder','medicine','electricity'];
 
@@ -1785,6 +1939,34 @@ if(!S.expKeywords)S.expKeywords=['kutti','diesel','vet','fodder','medicine','ele
     }
   });
 })();
+
+
+// ══════════════════════════════════════
+//  PERFORMANCE CACHE
+//  Invalidated on every save(). Prevents
+//  re-computing balances O(N*loops) per render.
+// ══════════════════════════════════════
+let _cache = {};
+let _cacheGen = 0; // increments on every save
+
+function _cacheKey(fn, id){ return fn + ':' + id; }
+
+function _cached(fn, id, compute){
+  const k = _cacheKey(fn, id);
+  if(_cache[k] !== undefined) return _cache[k];
+  const v = compute();
+  _cache[k] = v;
+  return v;
+}
+
+function invalidateCache(){
+  _cache = {};
+  _cacheGen++;
+}
+
+// Wrap save() to bust cache on every write
+const _origSave = save;
+// (override happens after save is defined — see bottom of init)
 
 // ── UTILS ──
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
@@ -1815,19 +1997,25 @@ function applyTheme(){
 function togDark(){S.profile.darkMode=document.getElementById('dark-tog').checked;save();applyTheme();}
 
 // ── NAV ──
+let _currentScr='s-dash';
 function goTo(id){
+  if(_currentScr===id && id!=='s-dash'){
+    // Same screen — just re-render (pull to refresh equivalent)
+  }
+  _currentScr=id;
   document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
   document.getElementById(id).classList.add('on');
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
   const nm={'s-dash':'n-dash','s-cons':'n-cons','s-bulk':'n-bulk','s-exp':'n-exp','s-gps':'n-dash','s-cows':'n-cow','s-collect':'n-dash'};
   const el=document.getElementById(nm[id]);if(el)el.classList.add('on');
+  // Only render the screen being shown — not all screens
   const fns={'s-dash':renderDash,'s-cons':renderCons,'s-del':renderDel,'s-paneer':renderPnr,'s-bulk':renderBulk,'s-exp':renderExp,'s-gps':renderGps,'s-cows':renderCows,'s-collect':renderCollect};
-  if(fns[id])fns[id]();
+  if(fns[id]) requestAnimationFrame(()=>fns[id]());
 }
 let _mz=500;
 function openM(id){const el=document.getElementById(id);if(!el)return;el.style.zIndex=(_mz+=10);el.classList.add('on');}
 function closeM(id){const el=document.getElementById(id);if(!el)return;el.classList.remove('on');el.style.zIndex='';}
-document.querySelectorAll('.mo').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on');}));
+document.querySelectorAll('.mo').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on');},{passive:true}));
 
 // ── PROFILE PANEL ──
 function closeProfile(){document.getElementById('pp-ov').classList.remove('on');}
@@ -2250,13 +2438,14 @@ function migratePaymentTypes(){
 
 // Total ever billed to a consumer (live records only — archive handled separately)
 function getConsLiveBilled(id){
-  const c=S.consumers.find(x=>x.id===id);if(!c)return 0;
-  return S.deliveries.filter(d=>d.consumerId===id).reduce((s,d)=>s+getDelAmt(d),0)
-       + S.paneerSales.filter(p=>p.buyerId===id).reduce((s,p)=>s+getPnrAmt(p),0);
+  return _cached('livebill',id,()=>{
+    const c=S.consumers.find(x=>x.id===id);if(!c)return 0;
+    return getConsLiveMilkBilled(id)+getConsLivePaneerBilled(id);
+  });
 }
-// Total ever paid by a consumer (live records only) — ALL payment types
+// Total ever paid by a consumer (live records only) — ALL payment types (cached)
 function getConsLivePaid(id){
-  return S.payments.filter(p=>p.consumerId===id).reduce((s,p)=>s+p.amount,0);
+  return _cached('livepaid',id,()=>S.payments.filter(p=>p.consumerId===id).reduce((s,p)=>s+p.amount,0));
 }
 // Milk-only payments (for milk dues calculation)
 function getConsLivePaidMilk(id){
@@ -2337,31 +2526,59 @@ function fmtCycle(cycle){
 }
 
 // Get billed amount for a consumer within a specific date range
+// Combines LIVE records (exact dates) + ARCHIVE (only if no live records exist for that month)
 function getConsBilledRange(id,start,end){
   const c=S.consumers.find(x=>x.id===id);if(!c)return 0;
   const dels=S.deliveries.filter(d=>d.consumerId===id&&d.date>=start&&d.date<=end);
   const pnr=S.paneerSales.filter(p=>p.buyerId===id&&p.date>=start&&p.date<=end);
-  if(dels.length||pnr.length){
-    return dels.reduce((s,d)=>s+getDelAmt(d),0)
-          +pnr.reduce((s,p)=>s+getPnrAmt(p),0);
-  }
-  // Try archive — sum months that overlap the range
+  // Sum live records (exact date match — correct for cross-month cycles)
+  let total=dels.reduce((s,d)=>s+getDelAmt(d),0)+pnr.reduce((s,p)=>s+getPnrAmt(p),0);
+  // For months in range where NO live data exists, check archive
+  // But only use archive for months fully compressed (no live records at all for that month)
   const months=getMonthsInRange(start,end);
-  return months.reduce((s,mon)=>{
-    const arch=(c.archive||{})[mon];
-    return s+(arch?arch.billed:0);
-  },0);
+  months.forEach(mon=>{
+    const hasLiveForMon=S.deliveries.some(d=>d.consumerId===id&&d.date.startsWith(mon))
+                      ||S.paneerSales.some(p=>p.buyerId===id&&p.date.startsWith(mon));
+    if(!hasLiveForMon){
+      const arch=(c.archive||{})[mon];
+      if(arch){
+        // If range covers full month: use full archive billed
+        // If range covers partial month: use per-day proportion from archive dels array
+        const monStart=mon+'-01';
+        const yr=parseInt(mon.split('-')[0]),moN=parseInt(mon.split('-')[1]);
+        const monEnd=`${yr}-${String(moN).padStart(2,'0')}-${String(new Date(yr,moN,0).getDate()).padStart(2,'0')}`;
+        const rangeStart=start>monStart?start:monStart;
+        const rangeEnd=end<monEnd?end:monEnd;
+        if(arch.dels&&arch.dels.length){
+          // Use per-day delivery records from archive (most accurate)
+          total+=arch.dels.filter(d=>d.date>=rangeStart&&d.date<=rangeEnd).reduce((s,d)=>s+(d.value||0),0);
+        } else {
+          // Fallback: pro-rate by days covered
+          const totalDays=new Date(yr,moN,0).getDate();
+          const coveredDays=Math.round((new Date(rangeEnd+'T12:00:00')-new Date(rangeStart+'T12:00:00'))/86400000)+1;
+          total+=arch.billed*(coveredDays/totalDays);
+        }
+      }
+    }
+  });
+  return total;
 }
 
 function getConsPaidRange(id,start,end){
+  // Sum all live payments that fall within the date range (exact match)
   const livePays=S.payments.filter(p=>p.consumerId===id&&p.date>=start&&p.date<=end);
-  const live=livePays.reduce((s,p)=>s+p.amount,0);
-  if(live>0||livePays.length>0)return live;
-  const c=S.consumers.find(x=>x.id===id);
+  let total=livePays.reduce((s,p)=>s+p.amount,0);
+  // For months with NO live payments, add archive paid (full month — payments don't need pro-rating)
   const months=getMonthsInRange(start,end);
-  return months.reduce((s,mon)=>{
-    const arch=(c?.archive||{})[mon];return s+(arch?arch.paid:0);
-  },0);
+  months.forEach(mon=>{
+    const hasLive=S.payments.some(p=>p.consumerId===id&&p.date.startsWith(mon));
+    if(!hasLive){
+      const c=S.consumers.find(x=>x.id===id);
+      const arch=(c?.archive||{})[mon];
+      if(arch)total+=arch.paid||0;
+    }
+  });
+  return total;
 }
 
 // Get all YYYY-MM months that are (even partially) covered by a date range
@@ -2388,20 +2605,22 @@ function getConsPaid(id,mon){
   const archPaid=(c?.archive||{})[mon]?.paid||0;
   return livePays.length>0 ? livePaid : archPaid;
 }
-// ── SEPARATED BILLING TOTALS ──
-// Milk billed (deliveries only, live)
+// ── SEPARATED BILLING TOTALS (cached per save cycle) ──
 function getConsLiveMilkBilled(id){
-  return S.deliveries.filter(d=>d.consumerId===id).reduce((s,d)=>s+getDelAmt(d),0);
+  return _cached('mlkbill',id,()=>S.deliveries.filter(d=>d.consumerId===id).reduce((s,d)=>s+getDelAmt(d),0));
 }
-// Paneer billed (paneer sales only, live)
 function getConsLivePaneerBilled(id){
-  return S.paneerSales.filter(p=>p.buyerId===id).reduce((s,p)=>s+getPnrAmt(p),0);
+  return _cached('pnrbill',id,()=>S.paneerSales.filter(p=>p.buyerId===id).reduce((s,p)=>s+getPnrAmt(p),0));
 }
 
 // TOTAL OUTSTANDING BALANCE = opening + all billed (live+archive) + manual dues − typed payments
 // Payments are matched by type: milk payments reduce milk dues, paneer payments reduce paneer dues.
 // 'general' payments reduce the combined total (no preference).
+// Results are cached per save() cycle — cache busted on every write.
 function getConsBal(id){
+  return _cached('bal', id, ()=>_getConsBalRaw(id));
+}
+function _getConsBalRaw(id){
   const c=S.consumers.find(x=>x.id===id);if(!c)return 0;
 
   // ── Live billed (separated) ──
@@ -2432,14 +2651,21 @@ function getConsBal(id){
   const milkOverpay=Math.max(0,milkPaid+generalPaid-liveMilkBill);
   const adjPaneerDue=Math.max(0,paneerDue-milkOverpay);
 
-  // ── Total due = milk + paneer (live) + archive + opening + manual − archive paid ──
+  // ── Barter deductions (purchased items deducted from consumer's milk bill) ──
+  const barterDeducted=getConsPurchasesTotal(id);
+
+  // ── Total due = milk + paneer (live) + archive + opening + manual − all paid − barter ──
   const totalBilled=liveBill+archBill+ob+md;
   const totalPaid=milkPaid+paneerPaid+generalPaid+archPaid;
-  return Math.max(0,totalBilled-totalPaid);
+  return Math.max(0,totalBilled-totalPaid-barterDeducted);
 }
 
 // Breakdown for display: shows separated milk/paneer dues
+// Cached per save() cycle
 function getConsBalBreakdown(id){
+  return _cached('breakdown', id, ()=>_getConsBalBreakdownRaw(id));
+}
+function _getConsBalBreakdownRaw(id){
   const c=S.consumers.find(x=>x.id===id);if(!c)return{milkDue:0,paneerDue:0,total:0};
   const liveMilkBill=getConsLiveMilkBilled(id);
   const livePaneerBill=getConsLivePaneerBilled(id);
@@ -2454,8 +2680,9 @@ function getConsBalBreakdown(id){
   const archPaid=Object.values(c.archive||{}).reduce((s,a)=>s+(a.paid||0),0);
   const ob=getObTotal('cons',id);
   const md=(S.manualDues||[]).filter(d=>d.consumerId===id).reduce((s,d)=>s+d.amount,0);
-  const total=Math.max(0,(liveMilkBill+livePaneerBill+archBill+ob+md)-(milkPaid+paneerPaid+generalPaid+archPaid));
-  return{milkBill:liveMilkBill,paneerBill:livePaneerBill,milkPaid,paneerPaid,generalPaid,milkDue,paneerDue,total};
+  const barterDeducted=getConsPurchasesTotal(id);
+  const total=Math.max(0,(liveMilkBill+livePaneerBill+archBill+ob+md)-(milkPaid+paneerPaid+generalPaid+archPaid)-barterDeducted);
+  return{milkBill:liveMilkBill,paneerBill:livePaneerBill,milkPaid,paneerPaid,generalPaid,milkDue,paneerDue,barterDeducted,total};
 }
 
 // ── PER-MONTH DUE BREAKDOWN (simple, for display) ──
@@ -2520,11 +2747,12 @@ function getConsLedger(id){
       payLog:pays.sort((a,b)=>a.date.localeCompare(b.date)).map(p=>({date:p.date,amount:p.amount}))});
   });
 
-  // Total all payments ever (live + archive)
+  // Total all payments ever (live + archive) + barter deductions
   const totalPaid=getConsLivePaid(id)+Object.values(c.archive||{}).reduce((s,a)=>s+(a.paid||0),0);
+  const totalBarterDeducted=getConsPurchasesTotal(id);
 
-  // FIFO: distribute payment pool across periods oldest-first
-  let pool=totalPaid;
+  // FIFO: distribute payment pool (payments + barter) across periods oldest-first
+  let pool=totalPaid+totalBarterDeducted;
   periods.forEach(p=>{
     const apply=Math.min(p.billed,pool);
     p.allocated=parseFloat(apply.toFixed(2));
@@ -2556,8 +2784,28 @@ function getBulkPurchasesTotal(bid){
 function getBulkPurchases(bid,mon){
   return (S.buyerPurchases||[]).filter(p=>p.buyerId===bid&&p.date.startsWith(mon)&&p.mode==='deduct').reduce((s,p)=>s+p.amount,0);
 }
+// ── CONSUMER BARTER / PURCHASES ──
+// Total barter deducted from consumer dues (all time)
+function getConsPurchasesTotal(cid){
+  return _cached('conspurch',cid,()=>(S.consPurchases||[]).filter(p=>p.consumerId===cid&&p.mode==='deduct').reduce((s,p)=>s+p.amount,0));
+}
+// Barter in a date range
+function getConsPurchasesRange(cid,start,end){
+  return (S.consPurchases||[]).filter(p=>p.consumerId===cid&&p.mode==='deduct'&&p.date>=start&&p.date<=end).reduce((s,p)=>s+p.amount,0);
+}
+// Barter credit carry — if deducted > billed, excess is credit for next cycle
+function getConsBarterCredit(cid){
+  const totalDeducted=getConsPurchasesTotal(cid);
+  const totalBilled=(S.deliveries.filter(d=>d.consumerId===cid).reduce((s,d)=>s+getDelAmt(d),0))
+                   +(S.paneerSales.filter(p=>p.buyerId===cid).reduce((s,p)=>s+getPnrAmt(p),0));
+  const archBill=Object.values((S.consumers.find(x=>x.id===cid)?.archive)||{}).reduce((s,a)=>s+(a.billed||0),0);
+  return Math.max(0,totalDeducted-(totalBilled+archBill));
+}
 // Total outstanding from bulk buyer = opening + all billed − all paid − deducted purchases
 function getBulkBal(bid){
+  return _cached('bulkbal', bid, ()=>_getBulkBalRaw(bid));
+}
+function _getBulkBalRaw(bid){
   const ob=getObTotal('bulk',bid);
   return Math.max(0, getBulkBilledTotal(bid)+ob - getBulkPaidTotal(bid) - getBulkPurchasesTotal(bid));
 }
@@ -2904,6 +3152,7 @@ function lpDeleteConfirmed(){
   S.paneerSales=S.paneerSales.filter(p=>p.buyerId!==id);
   S.payments=S.payments.filter(p=>p.consumerId!==id);
   S.manualDues=(S.manualDues||[]).filter(d=>d.consumerId!==id);
+  S.consPurchases=(S.consPurchases||[]).filter(p=>p.consumerId!==id);
   if(S.openingBalances)delete S.openingBalances['c_'+id];
   save();closeM('m-del-cons-confirm');renderCons();renderDash();toast('🗑️ Consumer deleted');
 }
@@ -3179,16 +3428,19 @@ function renderCons(){
   document.getElementById('cons-cnt').textContent=`${S.consumers.length} consumer${S.consumers.length!==1?'s':''}`;
   const el=document.getElementById('cons-list');
   if(!list.length){el.innerHTML=`<div class="es"><div class="ei">👥</div><div class="et">No consumers found</div></div>`;return;}
-  el.innerHTML='';
+  // Use DocumentFragment to batch all DOM inserts in one paint
+  const frag=document.createDocumentFragment();
   list.forEach(c=>{
     const div=document.createElement('div');div.className='li';
     div.innerHTML=`<div class="av" style="background:${avCol(c.name)}22;color:${avCol(c.name)}">${inits(c.name)}</div>
       <div class="lin"><div class="lname">${c.name}</div><div class="lsub">${c.delivTime||'—'}</div></div>
       <div class="lmeta"><span class="bdg ${c.status==='active'?'g':'a'}">${c.status||'active'}</span></div>`;
-    div.addEventListener('click',()=>viewConsDet(c.id));
+    div.addEventListener('click',()=>viewConsDet(c.id),{passive:true});
     attachLp(div,c.id);
-    el.appendChild(div);
+    frag.appendChild(div);
   });
+  el.innerHTML='';
+  el.appendChild(frag);
 }
 
 // ── CONSUMER DETAIL ──
@@ -3237,16 +3489,22 @@ function viewConsDet(id){
       adjEl.style.color=cycAdj.adjustment>=0?'var(--grn)':'var(--cor)';
     } else { adjEl.style.display='none'; }
   }
-  // Show milk/paneer dues breakdown if consumer has both
+  // Show milk/paneer/barter breakdown
   const breakdown=getConsBalBreakdown(id);
   const bdEl=document.getElementById('det-type-breakdown');
   if(bdEl){
     const hasBoth=breakdown.milkBill>0&&breakdown.paneerBill>0;
+    const hasBarter=breakdown.barterDeducted>0;
+    const barterCredit=getConsBarterCredit(id);
+    let bdParts=[];
     if(hasBoth){
-      bdEl.style.display='';
-      bdEl.innerHTML=`<span style="color:var(--blue)">🥛 Milk due: ₹${breakdown.milkDue.toFixed(0)}</span>`
-        +`&nbsp;&nbsp;<span style="color:var(--amb)">🧀 Paneer due: ₹${breakdown.paneerDue.toFixed(0)}</span>`;
-    } else { bdEl.style.display='none'; }
+      bdParts.push(`<span style="color:var(--blue)">🥛 ₹${breakdown.milkDue.toFixed(0)}</span>`);
+      bdParts.push(`<span style="color:var(--amb)">🧀 ₹${breakdown.paneerDue.toFixed(0)}</span>`);
+    }
+    if(hasBarter) bdParts.push(`<span style="color:var(--grn)">🔄 −₹${breakdown.barterDeducted.toFixed(0)}</span>`);
+    if(barterCredit>0.01) bdParts.push(`<span style="color:var(--amb)">Credit ₹${barterCredit.toFixed(0)} →next</span>`);
+    if(bdParts.length){ bdEl.style.display=''; bdEl.innerHTML=bdParts.join(' &nbsp; '); }
+    else { bdEl.style.display='none'; }
   }
 
   // ── Payment entries ──
@@ -3361,6 +3619,9 @@ function viewConsDet(id){
       <button onclick="deletePaneerInline('${p.id}','${id}')" style="background:var(--cxl);color:var(--cor);border:none;border-radius:7px;width:30px;height:30px;font-size:14px;cursor:pointer;flex-shrink:0">🗑️</button>
     </div>`;}).join('')+'</div>';
   } else pnrEl.innerHTML='';
+
+  // ── Barter / consumer purchases ──
+  renderConsBarterList(id);
 
   // ── Attendance for current cycle ──
   const cycStart=new Date(cycle.start+'T12:00:00'),cycEnd=new Date(cycle.end+'T12:00:00');
@@ -3501,6 +3762,64 @@ function openHistDetailArchive(consId,mon){
   openM('m-hist-detail');
 }
 
+// Delete delivery from history detail view and refresh
+function deleteDeliveryFromHist(delId, consId){
+  if(!confirm('Delete this delivery? This will update dues immediately.'))return;
+  S.deliveries=S.deliveries.filter(d=>d.id!==delId);
+  save();
+  // Refresh prev cycle data and reopen detail
+  const c=S.consumers.find(x=>x.id===consId);if(!c)return;
+  const bd=parseInt(c.billingDay)||1;
+  const prevCycle=getPrevCycleDates(bd);
+  const dels=S.deliveries.filter(d=>d.consumerId===consId&&d.date>=prevCycle.start&&d.date<=prevCycle.end);
+  const pays=S.payments.filter(p=>p.consumerId===consId&&p.date>=prevCycle.start&&p.date<=prevCycle.end);
+  window._prevCycleData={id:consId,cycle:prevCycle,dels,pays,
+    takenDates:[...new Set(dels.map(d=>d.date))].sort(),absentDates:[],
+    pnrKg:S.paneerSales.filter(p=>p.buyerId===consId&&p.date>=prevCycle.start&&p.date<=prevCycle.end).reduce((s,p)=>s+p.qty,0),
+    billed:getConsBilledRange(consId,prevCycle.start,prevCycle.end),
+    paid:getConsPaidRange(consId,prevCycle.start,prevCycle.end)};
+  openHistDetail(consId,'prev');
+  viewConsDet(consId);
+  toast('🗑️ Delivery deleted — dues updated');
+}
+function deletePaneerFromHist(pnrId, consId){
+  if(!confirm('Delete this paneer entry?'))return;
+  S.paneerSales=S.paneerSales.filter(p=>p.id!==pnrId);
+  save();
+  const c=S.consumers.find(x=>x.id===consId);if(!c)return;
+  const bd=parseInt(c.billingDay)||1;
+  const prevCycle=getPrevCycleDates(bd);
+  const dels=S.deliveries.filter(d=>d.consumerId===consId&&d.date>=prevCycle.start&&d.date<=prevCycle.end);
+  const pays=S.payments.filter(p=>p.consumerId===consId&&p.date>=prevCycle.start&&p.date<=prevCycle.end);
+  window._prevCycleData={id:consId,cycle:prevCycle,dels,pays,
+    takenDates:[...new Set(dels.map(d=>d.date))].sort(),absentDates:[],
+    pnrKg:S.paneerSales.filter(p=>p.buyerId===consId&&p.date>=prevCycle.start&&p.date<=prevCycle.end).reduce((s,p)=>s+p.qty,0),
+    billed:getConsBilledRange(consId,prevCycle.start,prevCycle.end),
+    paid:getConsPaidRange(consId,prevCycle.start,prevCycle.end)};
+  openHistDetail(consId,'prev');
+  viewConsDet(consId);
+  toast('🗑️ Paneer entry deleted — dues updated');
+}
+// Also patch payment delete from hist
+function deletePaymentFromHist(payId, consId){
+  if(!confirm('Delete this payment record?'))return;
+  S.payments=S.payments.filter(p=>p.id!==payId);
+  save();
+  const c=S.consumers.find(x=>x.id===consId);if(!c)return;
+  const bd=parseInt(c.billingDay)||1;
+  const prevCycle=getPrevCycleDates(bd);
+  const dels=S.deliveries.filter(d=>d.consumerId===consId&&d.date>=prevCycle.start&&d.date<=prevCycle.end);
+  const pays=S.payments.filter(p=>p.consumerId===consId&&p.date>=prevCycle.start&&p.date<=prevCycle.end);
+  window._prevCycleData={id:consId,cycle:prevCycle,dels,pays,
+    takenDates:[...new Set(dels.map(d=>d.date))].sort(),absentDates:[],
+    pnrKg:S.paneerSales.filter(p=>p.buyerId===consId&&p.date>=prevCycle.start&&p.date<=prevCycle.end).reduce((s,p)=>s+p.qty,0),
+    billed:getConsBilledRange(consId,prevCycle.start,prevCycle.end),
+    paid:getConsPaidRange(consId,prevCycle.start,prevCycle.end)};
+  openHistDetail(consId,'prev');
+  viewConsDet(consId);
+  toast('🗑️ Payment deleted — dues updated');
+}
+
 function buildHistDetailFull(c,data){
   const {dels,pays,pnrSales,billed,paid,takenDates,absentDates,cycleDays,daysTaken,daysAbsent,milkL,paneerKg,isLive,isLegacy}=data;
   const due=Math.max(0,billed-paid);
@@ -3541,10 +3860,18 @@ function buildHistDetailFull(c,data){
   // ── Deliveries ──
   html+=`<div style="padding:9px 13px;background:var(--surf2);border-bottom:1px solid var(--bdr)"><div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px">🥛 Deliveries${milkL!=null?' — '+fmtQty(milkL)+'L total':dels.length?' — '+fmtQty(dels.reduce((s,d)=>s+d.qty,0))+'L total':''}</div></div>`;
   if(dels.length){
-    html+=dels.sort((a,b)=>b.date.localeCompare(a.date)).map(d=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 13px;border-bottom:1px solid var(--bdr)">
-      <div><div style="font-size:12px;font-weight:700">${fmtD(d.date)}</div><div style="font-size:10px;color:var(--t3)">${d.shift||'morning'}</div></div>
-      <div style="text-align:right"><div style="font-size:12px;font-weight:700;color:var(--blue)">${fmtQty(d.qty)}L</div><div style="font-size:10px;color:var(--t3)">₹${typeof d.value==='number'?d.value.toFixed(2):getDelAmt(d).toFixed(2)}</div></div>
-    </div>`).join('');
+    html+=dels.sort((a,b)=>b.date.localeCompare(a.date)).map(d=>{
+      const amt=typeof d.value==='number'?d.value:getDelAmt(d);
+      const editBtns=isLive&&d.id?`<div style="display:flex;gap:4px;flex-shrink:0">
+        <button onclick="closeM('m-hist-detail');openEditDeliveryInline('${d.id}','${c.id}')" style="background:var(--bxl);color:var(--blue);border:none;border-radius:6px;width:28px;height:28px;font-size:12px;cursor:pointer">✏️</button>
+        <button onclick="deleteDeliveryFromHist('${d.id}','${c.id}')" style="background:var(--cxl);color:var(--cor);border:none;border-radius:6px;width:28px;height:28px;font-size:12px;cursor:pointer">🗑️</button>
+      </div>`:'';
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 13px;border-bottom:1px solid var(--bdr)">
+        <div style="flex:1"><div style="font-size:12px;font-weight:700">${fmtD(d.date)}</div><div style="font-size:10px;color:var(--t3)">${d.shift||'morning'}</div></div>
+        <div style="text-align:right;margin-right:${editBtns?'8px':'0'}"><div style="font-size:12px;font-weight:700;color:var(--blue)">${fmtQty(d.qty)}L</div><div style="font-size:10px;color:var(--t3)">₹${amt.toFixed(2)}</div></div>
+        ${editBtns}
+      </div>`;
+    }).join('');
   } else {
     html+=`<div style="padding:9px 13px;font-size:12px;color:var(--t3)">${isLegacy?'Detail not available for this period':'No deliveries recorded'}</div>`;
   }
@@ -3555,10 +3882,17 @@ function buildHistDetailFull(c,data){
   if(pKg>0){
     html+=`<div style="padding:9px 13px;background:var(--surf2);border-bottom:1px solid var(--bdr)"><div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px">🧀 Paneer — ${fmtQty(pKg)}kg total</div></div>`;
     if(pnrArr.length){
-      html+=pnrArr.sort((a,b)=>b.date.localeCompare(a.date)).map(p=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 13px;border-bottom:1px solid var(--bdr)">
-        <div><div style="font-size:12px;font-weight:700">${fmtD(p.date)}</div><div style="font-size:10px;color:var(--t3)">${fmtQty(p.qty)}kg × ₹${p.rate}</div></div>
-        <div style="text-align:right"><div style="font-size:12px;font-weight:700;color:var(--amb)">₹${getPnrAmt(p).toFixed(2)}</div><div style="font-size:10px;color:${p.payStatus==='paid'?'var(--grn)':'var(--cor)'}">${p.payStatus||''}</div></div>
-      </div>`).join('');
+      html+=pnrArr.sort((a,b)=>b.date.localeCompare(a.date)).map(p=>{
+        const editBtns=isLive&&p.id?`<div style="display:flex;gap:4px;flex-shrink:0">
+          <button onclick="closeM('m-hist-detail');openEditPaneerInline('${p.id}','${c.id}')" style="background:var(--axl);color:var(--amb);border:none;border-radius:6px;width:28px;height:28px;font-size:12px;cursor:pointer">✏️</button>
+          <button onclick="deletePaneerFromHist('${p.id}','${c.id}')" style="background:var(--cxl);color:var(--cor);border:none;border-radius:6px;width:28px;height:28px;font-size:12px;cursor:pointer">🗑️</button>
+        </div>`:'';
+        return `<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 13px;border-bottom:1px solid var(--bdr)">
+          <div style="flex:1"><div style="font-size:12px;font-weight:700">${fmtD(p.date)}</div><div style="font-size:10px;color:var(--t3)">${fmtQty(p.qty)}kg × ₹${p.rate}</div></div>
+          <div style="text-align:right;margin-right:${editBtns?'8px':'0'}"><div style="font-size:12px;font-weight:700;color:var(--amb)">₹${getPnrAmt(p).toFixed(2)}</div><div style="font-size:10px;color:${p.payStatus==='paid'?'var(--grn)':'var(--cor)'}">${p.payStatus||''}</div></div>
+          ${editBtns}
+        </div>`;
+      }).join('');
     } else {
       html+=`<div style="padding:9px 13px;font-size:12px;color:var(--t3)">Summary: ${fmtQty(pKg)}kg${isLegacy?' (detail not available)':''}</div>`;
     }
@@ -3570,8 +3904,10 @@ function buildHistDetailFull(c,data){
   if(payArr.length){
     html+=payArr.sort((a,b)=>(a.date||'').localeCompare(b.date||'')).map(p=>{
       const amt=p.amount!=null?p.amount:0;
-      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 13px;border-bottom:1px solid var(--bdr)">
-        <div><div style="font-size:12px;font-weight:700;color:var(--grn)">₹${amt} received</div><div style="font-size:10px;color:var(--t3)">${fmtD(p.date)} · ${mi[p.mode]||'💳'} ${p.mode||'cash'}${p.ref?' · '+p.ref:''}</div></div>
+      const delBtn=isLive&&p.id?`<button onclick="deletePaymentFromHist('${p.id}','${c.id}')" style="background:var(--cxl);color:var(--cor);border:none;border-radius:6px;width:28px;height:28px;font-size:12px;cursor:pointer;flex-shrink:0">🗑️</button>`:'';
+      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 13px;border-bottom:1px solid var(--bdr)">
+        <div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--grn)">₹${amt} received</div><div style="font-size:10px;color:var(--t3)">${fmtD(p.date)} · ${mi[p.mode]||'💳'} ${p.mode||'cash'}${p.ref?' · '+p.ref:''}</div></div>
+        ${delBtn}
       </div>`;
     }).join('');
   } else {
@@ -3587,17 +3923,20 @@ function setColF(v,el){colF=v;document.querySelectorAll('#s-collect .ch').forEac
 function renderCollect(){
   const q=(document.getElementById('col-srch').value||'').toLowerCase(),mon=todayMon();
   const coll=S.payments.filter(p=>p.date.startsWith(mon)).reduce((s,p)=>s+p.amount,0);
-  const out=S.consumers.reduce((s,c)=>s+getConsBal(c.id),0);
+  // Compute all balances once — avoid N*4 recalculations
+  const _allBals=S.consumers.map(c=>({c,bal:getConsBal(c.id),bd:getConsBalBreakdown(c.id)}));
+  const out=_allBals.reduce((s,x)=>s+x.bal,0);
   document.getElementById('col-coll').textContent='₹'+coll.toFixed(0);document.getElementById('col-out').textContent='₹'+out.toFixed(0);
-  let list=S.consumers.filter(c=>{
+  let list=_allBals.filter(x=>{
+    const c=x.c;
     const m=c.name.toLowerCase().includes(q)||c.phone.includes(q);
-    if(colF==='due')return m&&getConsBal(c.id)>0;if(colF==='clear')return m&&getConsBal(c.id)===0;return m;
-  }).sort((a,b)=>getConsBal(b.id)-getConsBal(a.id));
+    if(colF==='due')return m&&x.bal>0;if(colF==='clear')return m&&x.bal===0;return m;
+  }).sort((a,b)=>b.bal-a.bal);
   const el=document.getElementById('col-list');
   if(!list.length){el.innerHTML=`<div class="es"><div class="ei">✅</div><div class="et">All cleared!</div></div>`;}
-  else el.innerHTML=list.map(c=>{
-    const bal=getConsBal(c.id),billed=getConsBilled(c.id,mon),paid=getConsPaid(c.id,mon),pct=billed>0?Math.min(100,paid/billed*100):100;
-    const bd=getConsBalBreakdown(c.id);
+  else el.innerHTML=list.map(x=>{
+    const c=x.c,bal=x.bal,bd=x.bd;
+    const billed=getConsBilled(c.id,mon),paid=getConsPaid(c.id,mon),pct=billed>0?Math.min(100,paid/billed*100):100;
     const hasBoth=bd.milkBill>0&&bd.paneerBill>0;
     const dueLine=hasBoth
       ?`<span style="font-size:9px;color:var(--blue)">🥛₹${bd.milkDue.toFixed(0)}</span> <span style="font-size:9px;color:var(--amb)">🧀₹${bd.paneerDue.toFixed(0)}</span>`
@@ -4303,15 +4642,16 @@ function deleteBulkMonth(bid,mon){
 }
 function renderBulk(){
   const mon=todayMon();
-  const rev=S.bulkBuyers.reduce((s,b)=>s+getBulkBilledTotal(b.id),0);
-  const due=S.bulkBuyers.reduce((s,b)=>s+getBulkBal(b.id),0);
+  // Compute all bulk buyer data in one pass
+  const _bulkData=S.bulkBuyers.map(b=>({b,bal:getBulkBal(b.id),monBilled:getBulkBilled(b.id,mon),allBilled:getBulkBilledTotal(b.id)}));
+  const rev=_bulkData.reduce((s,x)=>s+x.allBilled,0);
+  const due=_bulkData.reduce((s,x)=>s+x.bal,0);
   document.getElementById('bulk-rev').textContent='₹'+rev.toFixed(0);
   document.getElementById('bulk-due').textContent='₹'+due.toFixed(0);
   const el=document.getElementById('bulk-list');
   if(!S.bulkBuyers.length){el.innerHTML=`<div class="es"><div class="ei">⭐</div><div class="et">No bulk buyers</div><div class="ex">Tap + to add</div></div>`;return;}
-  el.innerHTML=S.bulkBuyers.map(b=>{
-    const monBilled=getBulkBilled(b.id,mon);
-    const totalDue=getBulkBal(b.id);
+  el.innerHTML=_bulkData.map(x=>{
+    const b=x.b,monBilled=x.monBilled,totalDue=x.bal;
     // Separate milk (L) and paneer (kg) quantities using _prodType
     const milkQty=S.paneerSales.filter(p=>p.buyerId==='bulk-'+b.id&&p.date.startsWith(mon)&&p._prodType==='milk').reduce((s,p)=>s+p.qty,0);
     const paneerQty=S.paneerSales.filter(p=>p.buyerId==='bulk-'+b.id&&p.date.startsWith(mon)&&p._prodType==='paneer').reduce((s,p)=>s+p.qty,0);
@@ -4397,6 +4737,139 @@ function renderExp(){
       miscEl.appendChild(div);
     });
   }
+  renderExpUdhariSummary();
+  renderExpLoanSummary();
+}
+
+function renderExpUdhariSummary(){
+  if(!S.udhari)S.udhari=[];
+  const el=document.getElementById('exp-udhari-summary');if(!el)return;
+  if(!S.udhari.length){el.innerHTML=`<div class="card"><div class="es" style="padding:12px"><div class="et">No udhari entries</div><div class="ex">Tap ➕ Add to record credit purchases</div></div></div>`;return;}
+  el.innerHTML='<div class="card">'+S.udhari.map(u=>`
+    <div id="ud-exp-card-${u.id}" style="padding:9px 13px;border-bottom:1px solid var(--bdr)">
+      <div style="display:flex;align-items:flex-start;gap:8px">
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700;font-size:13px">${u.name} <span style="font-size:9px;background:${u.status==='cleared'?'var(--gxl)':'var(--axl)'};color:${u.status==='cleared'?'var(--grn)':'var(--amb)'};border-radius:4px;padding:1px 5px;font-weight:700">${u.status==='cleared'?'Cleared':'Pending'}</span></div>
+          <div style="font-size:10px;color:var(--t3)">${fmtD(u.date)}${u.supplier?' • '+u.supplier:''} • MRP ₹${u.mrp.toFixed(0)} · Paid ₹${u.paid.toFixed(0)}</div>
+          ${(u.payments||[]).length>0?`<div style="font-size:10px;color:var(--t3);margin-top:2px">${(u.payments||[]).map(p=>`${fmtD(p.date)}: ₹${p.amt.toFixed(0)}`).join(' · ')}</div>`:''}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0;text-align:right">
+          <div style="font-weight:700;color:${u.remaining>0?'var(--cor)':'var(--grn)'}">₹${u.remaining.toFixed(0)} due</div>
+          ${u.status!=='cleared'?`<button onclick="payUdhariExp('${u.id}')" style="font-size:10px;background:var(--bxl);color:var(--blue);border:1.5px solid var(--bdr);border-radius:5px;padding:2px 7px;cursor:pointer;font-weight:700">💳 Pay</button>`:''}
+          ${u.status!=='cleared'?`<button onclick="clearUdhari('${u.id}')" style="font-size:10px;background:var(--grn);color:#fff;border:none;border-radius:5px;padding:2px 7px;cursor:pointer;font-weight:700">✅ Clear</button>`:''}
+        </div>
+      </div>
+    </div>`).join('')+'</div>';
+}
+
+function payUdhariExp(id){
+  // Toggle inline payment form within expenses screen udhari card
+  const formId='ud-exp-pay-form-'+id;
+  const existing=document.getElementById(formId);
+  if(existing){existing.style.display=existing.style.display==='none'?'':'none';return;}
+  const card=document.getElementById('ud-exp-card-'+id);
+  if(!card)return;
+  const u=S.udhari.find(x=>x.id===id);if(!u)return;
+  const form=document.createElement('div');
+  form.id=formId;
+  form.style.cssText='margin-top:7px;padding-top:7px;border-top:1px dashed var(--bdr)';
+  form.innerHTML=`
+    <div style="font-size:11px;font-weight:700;color:var(--t2);margin-bottom:5px">💳 Record Payment (₹${u.remaining.toFixed(0)} remaining)</div>
+    <div style="display:flex;gap:6px">
+      <input id="ud-ep-amt-${id}" type="number" placeholder="Amount" min="1" max="${u.remaining}" style="flex:1;padding:6px 8px;border:1.5px solid var(--bdr);border-radius:7px;font-size:13px;background:var(--surf);color:var(--tex);outline:none">
+      <input id="ud-ep-date-${id}" type="date" value="${today()}" style="flex:1;padding:6px 8px;border:1.5px solid var(--bdr);border-radius:7px;font-size:13px;background:var(--surf);color:var(--tex);outline:none">
+    </div>
+    <div style="font-size:10px;color:var(--t3);margin-top:3px">Tracked in Udhari only — not added to Expenses.</div>
+    <div style="display:flex;gap:6px;margin-top:6px">
+      <button onclick="submitUdhariExpPayment('${id}')" style="flex:2;padding:6px;background:var(--amb);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer">💾 Save</button>
+      <button onclick="document.getElementById('${formId}').style.display='none'" style="flex:1;padding:6px;background:var(--surf2);color:var(--t2);border:1.5px solid var(--bdr);border-radius:7px;font-size:12px;cursor:pointer">✕</button>
+    </div>`;
+  card.appendChild(form);
+}
+
+function submitUdhariExpPayment(id){
+  const amtEl=document.getElementById('ud-ep-amt-'+id);
+  const dateEl=document.getElementById('ud-ep-date-'+id);
+  const payAmt=parseFloat(amtEl?amtEl.value:'');
+  if(!payAmt||isNaN(payAmt)||payAmt<=0){toast('⚠️ Enter a valid amount');return;}
+  const payDate=dateEl?dateEl.value:today();
+  S.udhari=S.udhari.map(u=>{
+    if(u.id!==id)return u;
+    const newPaid=parseFloat((u.paid+payAmt).toFixed(2));
+    const newRemaining=parseFloat(Math.max(0,u.mrp-newPaid).toFixed(2));
+    const newStatus=newRemaining<=0?'cleared':'pending';
+    const payments=[...(u.payments||[]),{amt:parseFloat(payAmt.toFixed(2)),date:payDate}];
+    return{...u,paid:newPaid,remaining:newRemaining,status:newStatus,payments};
+  });
+  save();renderExp();renderDash();
+  toast('✅ Payment of ₹'+payAmt.toFixed(0)+' recorded');
+}
+
+function renderExpLoanSummary(){
+  if(!S.loans)S.loans=[];
+  const el=document.getElementById('exp-loan-summary');if(!el)return;
+  if(!S.loans.length){el.innerHTML=`<div class="card"><div class="es" style="padding:12px"><div class="et">No loans recorded</div><div class="ex">Tap ➕ Add to record personal money put into dairy</div></div></div>`;return;}
+  const totalPending=S.loans.filter(l=>l.status!=='cleared').reduce((s,l)=>s+(l.amt-(l.repaidAmt||0)),0);
+  el.innerHTML='<div class="card">'+S.loans.map(l=>{
+    const rem=parseFloat((l.amt-(l.repaidAmt||0)).toFixed(2));
+    const payHistHtml=(l.payments||[]).length>0?`<div style="font-size:10px;color:var(--t3);margin-top:2px">${(l.payments||[]).map(p=>`${fmtD(p.date)}: ₹${p.amt.toFixed(0)}`).join(' · ')}</div>`:'';
+    return `<div id="loan-exp-card-${l.id}" style="padding:9px 13px;border-bottom:1px solid var(--bdr)">
+      <div style="display:flex;align-items:flex-start;gap:8px">
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700;font-size:13px">₹${l.amt.toFixed(0)} <span style="font-size:9px;background:${l.status==='cleared'?'var(--gxl)':l.status==='partial'?'var(--axl)':'var(--cxl)'};color:${l.status==='cleared'?'var(--grn)':l.status==='partial'?'var(--amb)':'var(--cor)'};border-radius:4px;padding:1px 5px;font-weight:700">${l.status==='cleared'?'Cleared':l.status==='partial'?'Partial':'Pending'}</span></div>
+          <div style="font-size:10px;color:var(--t3)">${fmtD(l.date)}${l.source?' • '+l.source:''}${l.note?' • '+l.note:''}</div>
+          ${payHistHtml}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0;text-align:right">
+          <div style="font-weight:700;color:${rem>0?'var(--cor)':'var(--grn)'}">₹${rem.toFixed(0)} due</div>
+          ${l.status!=='cleared'?`<button onclick="markLoanRepaidExp('${l.id}')" style="font-size:10px;background:var(--bxl);color:var(--blue);border:1.5px solid var(--bdr);border-radius:5px;padding:2px 7px;cursor:pointer;font-weight:700">💳 Pay</button>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('')+(totalPending>0?`<div style="padding:8px 13px;font-size:12px;font-weight:700;color:var(--cor);text-align:right">Total Pending: ₹${totalPending.toFixed(0)}</div>`:'')+'</div>';
+}
+
+function markLoanRepaidExp(id){
+  // Inline payment form on expense screen loan card
+  const formId='loan-exp-pay-form-'+id;
+  const existing=document.getElementById(formId);
+  if(existing){existing.style.display=existing.style.display==='none'?'':'none';return;}
+  const card=document.getElementById('loan-exp-card-'+id);
+  if(!card)return;
+  const l=S.loans.find(x=>x.id===id);if(!l)return;
+  const remaining=l.amt-(l.repaidAmt||0);
+  const form=document.createElement('div');
+  form.id=formId;
+  form.style.cssText='margin-top:7px;padding-top:7px;border-top:1px dashed var(--bdr)';
+  form.innerHTML=`
+    <div style="font-size:11px;font-weight:700;color:var(--t2);margin-bottom:5px">💳 Record Loan Payment (₹${remaining.toFixed(0)} remaining)</div>
+    <div style="display:flex;gap:6px">
+      <input id="lep-amt-${id}" type="number" placeholder="Amount" min="1" max="${remaining}" style="flex:1;padding:6px 8px;border:1.5px solid var(--bdr);border-radius:7px;font-size:13px;background:var(--surf);color:var(--tex);outline:none">
+      <input id="lep-date-${id}" type="date" value="${today()}" style="flex:1;padding:6px 8px;border:1.5px solid var(--bdr);border-radius:7px;font-size:13px;background:var(--surf);color:var(--tex);outline:none">
+    </div>
+    <div style="font-size:10px;color:var(--t3);margin-top:3px">Tracked in Loan records only — not added to Expenses.</div>
+    <div style="display:flex;gap:6px;margin-top:6px">
+      <button onclick="submitLoanExpPayment('${id}')" style="flex:2;padding:6px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer">💾 Save</button>
+      <button onclick="document.getElementById('${formId}').style.display='none'" style="flex:1;padding:6px;background:var(--surf2);color:var(--t2);border:1.5px solid var(--bdr);border-radius:7px;font-size:12px;cursor:pointer">✕</button>
+    </div>`;
+  card.appendChild(form);
+}
+
+function submitLoanExpPayment(id){
+  const amtEl=document.getElementById('lep-amt-'+id);
+  const dateEl=document.getElementById('lep-date-'+id);
+  const repaid=parseFloat(amtEl?amtEl.value:'');
+  if(!repaid||isNaN(repaid)||repaid<=0){toast('⚠️ Enter a valid amount');return;}
+  const payDate=dateEl?dateEl.value:today();
+  S.loans=S.loans.map(l=>{
+    if(l.id!==id)return l;
+    const newRepaid=(l.repaidAmt||0)+repaid;
+    const newStatus=newRepaid>=l.amt?'cleared':newRepaid>0?'partial':'pending';
+    const payments=[...(l.payments||[]),{amt:parseFloat(repaid.toFixed(2)),date:payDate}];
+    return{...l,repaidAmt:parseFloat(newRepaid.toFixed(2)),status:newStatus,payments};
+  });
+  save();renderExp();renderDash();
+  toast('✅ Loan payment of ₹'+repaid.toFixed(0)+' recorded');
 }
 
 // ── EXPENSE LONG PRESS ──
@@ -4404,8 +4877,8 @@ let expLpTimer=null,expLpEid=null;
 function attachExpLp(el,eid){
   const start=()=>{expLpTimer=setTimeout(()=>openExpLpSheet(eid),600);};
   const end=()=>clearTimeout(expLpTimer);
-  el.addEventListener('touchstart',start,{passive:true});el.addEventListener('touchend',end);el.addEventListener('touchmove',end,{passive:true});
-  el.addEventListener('mousedown',start);el.addEventListener('mouseup',end);el.addEventListener('mouseleave',end);
+  el.addEventListener('touchstart',start,{passive:true});el.addEventListener('touchend',end,{passive:true});el.addEventListener('touchmove',end,{passive:true});
+  el.addEventListener('mousedown',start,{passive:true});el.addEventListener('mouseup',end,{passive:true});el.addEventListener('mouseleave',end,{passive:true});
   el.addEventListener('contextmenu',ev=>{ev.preventDefault();openExpLpSheet(eid);});
 }
 function expLpStart(ev,eid){expLpEid=eid;expLpTimer=setTimeout(()=>openExpLpSheet(eid),600);}
@@ -5133,7 +5606,14 @@ function renderCows(){
 // ══════════════════════════════════════
 //  DASHBOARD
 // ══════════════════════════════════════
+let _dashTimer=null;
 function renderDash(){
+  // Throttle: skip if called again within 100ms (e.g. rapid save+render sequences)
+  if(_dashTimer) return;
+  _dashTimer=setTimeout(()=>{ _dashTimer=null; }, 100);
+  _renderDashImpl();
+}
+function _renderDashImpl(){
   const mon=todayMon(),now=new Date(),h=now.getHours();
   const greet=h<12?'Good morning ☀️':h<17?'Good afternoon 🌤️':'Good evening 🌙';
   document.getElementById('d-greet').textContent=greet;
@@ -5147,15 +5627,17 @@ function renderDash(){
   const todayMilk=S.deliveries.filter(d=>d.date===today()).reduce((s,d)=>s+d.qty,0);
   document.getElementById('d-milk').textContent=todayMilk.toFixed(1)+'L';
 
-  // ── Total pending dues: consumers + bulk buyers ──
-  const consPend=S.consumers.reduce((s,c)=>s+getConsBal(c.id),0);
-  const bulkPend=S.bulkBuyers.reduce((s,b)=>s+getBulkBal(b.id),0);
+  // ── Compute all balances ONCE (cached per save cycle) ──
+  const _consBals=S.consumers.map(c=>({c,bal:getConsBal(c.id)}));
+  const _bulkBals=S.bulkBuyers.map(b=>({b,bal:getBulkBal(b.id)}));
+  const consPend=_consBals.reduce((s,x)=>s+x.bal,0);
+  const bulkPend=_bulkBals.reduce((s,x)=>s+x.bal,0);
   const totalPend=consPend+bulkPend;
   document.getElementById('d-pend').textContent='₹'+totalPend.toFixed(0);
 
-  // ── Count of consumers/buyers with dues ──
-  const consDueCnt=S.consumers.filter(c=>getConsBal(c.id)>0).length;
-  const bulkDueCnt=S.bulkBuyers.filter(b=>getBulkBal(b.id)>0).length;
+  // ── Count of consumers/buyers with dues (reuse computed values) ──
+  const consDueCnt=_consBals.filter(x=>x.bal>0).length;
+  const bulkDueCnt=_bulkBals.filter(x=>x.bal>0).length;
   const totalDueCnt=consDueCnt+bulkDueCnt;
   document.getElementById('d-due-cnt').textContent=totalDueCnt>0?`(${totalDueCnt})`:'';
   document.getElementById('d-overdue').textContent=totalDueCnt;
@@ -5188,6 +5670,35 @@ function renderDash(){
   // ── Expenses this month ──
   const expTot=S.expenses.filter(e=>e.date.startsWith(mon)).reduce((s,e)=>s+e.amt,0);
   document.getElementById('d-exp-mon').textContent='₹'+expTot.toFixed(0);
+
+  // ── Total Balance (all-time) ──
+  const allDairyIncome=S.payments.reduce((s,p)=>s+p.amount,0)
+    +S.bulkPayments.reduce((s,p)=>s+p.amount,0)
+    +(S.walkInSales||[]).reduce((s,w)=>s+w.total,0)
+    +S.consumers.reduce((s,c)=>s+Object.values(c.archive||{}).reduce((ss,a)=>ss+(a.paid||0),0),0);
+  const allLoansIn=(S.loans||[]).reduce((s,l)=>s+l.amt,0);
+  const allLoansRepaid=(S.loans||[]).reduce((s,l)=>s+(l.repaidAmt||0),0);
+  const allUdhariPaid=(S.udhari||[]).reduce((s,u)=>s+u.paid,0);
+  const allExpLive=S.expenses.filter(e=>!e._fromUdhari).reduce((s,e)=>s+e.amt,0);
+  const allExpArchived=Object.values(S.expArchive||{}).reduce((s,a)=>s+a.total,0);
+  const allExp=allExpLive+allExpArchived;
+  const totalBalance=allDairyIncome+allLoansIn-allExp-allLoansRepaid-allUdhariPaid;
+  const balEl=document.getElementById('d-total-balance');
+  if(balEl){
+    balEl.textContent=(totalBalance>=0?'₹':'−₹')+Math.abs(totalBalance).toFixed(0);
+    balEl.closest('.sc').classList.toggle('gr',totalBalance>=0);
+    balEl.closest('.sc').classList.toggle('co',totalBalance<0);
+  }
+
+  // ── Loan liabilities (show pending in dashboard) ──
+  const pendingLoans=(S.loans||[]).filter(l=>l.status!=='cleared').reduce((s,l)=>s+(l.amt-(l.repaidAmt||0)),0);
+  const pendingUdhari=(S.udhari||[]).filter(u=>u.status!=='cleared').reduce((s,u)=>s+u.remaining,0);
+  const loanEl=document.getElementById('d-loan-liability');
+  if(loanEl){
+    const total=pendingLoans+pendingUdhari;
+    loanEl.style.display=total>0?'':'none';
+    if(total>0)loanEl.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0 6px;border-bottom:1px solid var(--bdr)"><span style="font-size:12px;color:var(--t2);font-weight:600">🏦 Loans pending</span><span style="font-family:var(--fh);font-weight:700;color:var(--cor)">₹${pendingLoans.toFixed(0)}</span></div><div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0 0"><span style="font-size:12px;color:var(--t2);font-weight:600">🛒 Udhari pending</span><span style="font-family:var(--fh);font-weight:700;color:var(--amb)">₹${pendingUdhari.toFixed(0)}</span></div>`;
+  }
 
   // ── Expense categories on dash ──
   const monExps=S.expenses.filter(e=>e.date.startsWith(mon));
@@ -5269,8 +5780,8 @@ function renderDash(){
 
   // ── Pending dues list: consumers + bulk buyers combined ──
   const ppEl=document.getElementById('d-pend-list');
-  const consDueList=S.consumers.filter(c=>getConsBal(c.id)>0).map(c=>({name:c.name,id:c.id,bal:getConsBal(c.id),type:'cons'}));
-  const bulkDueList=S.bulkBuyers.filter(b=>getBulkBal(b.id)>0).map(b=>({name:b.name,id:b.id,bal:getBulkBal(b.id),type:'bulk'}));
+  const consDueList=_consBals.filter(x=>x.bal>0).map(x=>({name:x.c.name,id:x.c.id,bal:x.bal,type:'cons'}));
+  const bulkDueList=_bulkBals.filter(x=>x.bal>0).map(x=>({name:x.b.name,id:x.b.id,bal:x.bal,type:'bulk'}));
   const allDue=[...consDueList,...bulkDueList].sort((a,b)=>b.bal-a.bal).slice(0,6);
   if(!allDue.length){
     ppEl.innerHTML=`<div class="es" style="padding:18px"><div class="ei">✅</div><div class="et">All cleared!</div></div>`;
@@ -5316,7 +5827,15 @@ function renderDash(){
         .reduce((s,d)=>s+Object.values(S.cowProduction[d]).reduce((ss,p)=>ss+(p.m||0)+(p.e||0),0),0);
       const cowHist=(S.cowHistory||[]).filter(h=>h.month===m).reduce((s,h)=>s+(h.totalL||0),0);
       const totalProd=cowProd+cowHist;
-      const net=totalInc-expTot;
+      // Loans received this month (liability, not income)
+      const monLoansIn=(S.loans||[]).filter(l=>l.date.startsWith(m)).reduce((s,l)=>s+l.amt,0);
+      // Loan repayments made this month
+      const monLoansRepaid=(S.loans||[]).filter(l=>l.date.startsWith(m)).reduce((s,l)=>s+(l.repaidAmt||0),0);
+      // Udhari payments made this month (paid portion at time of entry + subsequent payments)
+      const monUdhariPaid=(S.udhari||[]).filter(u=>u.date.startsWith(m)).reduce((s,u)=>s+u.paid,0);
+      // Total balance = dairy income + loans in - expenses - loans repaid - udhari paid
+      const balance=totalInc+monLoansIn-expTot-monLoansRepaid-monUdhariPaid;
+      const balPos=balance>=0;
       // Most recent month expanded by default; older ones collapsed
       const expanded=idx===0;
       const cardId='dhist-'+m.replace('-','');
@@ -5327,7 +5846,7 @@ function renderDash(){
             <div style="font-size:10px;color:var(--t3);margin-top:1px">${totalMlk>0?fmtQty(totalMlk)+'L milk · ':''}${totalPnr>0?fmtQty(totalPnr)+'kg paneer · ':''}Income ₹${totalInc.toFixed(0)}</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px">
-            <div style="font-size:12px;font-weight:700;color:${net>=0?'var(--grn)':'var(--cor)'}">${net>=0?'+':'−'}₹${Math.abs(net).toFixed(0)}</div>
+            <div style="font-size:12px;font-weight:700;color:${balPos?'var(--grn)':'var(--cor)'}">${balPos?'+':'−'}₹${Math.abs(balance).toFixed(0)}</div>
             <span id="${cardId}-arr" style="font-size:11px;color:var(--t3);transition:transform .2s;${expanded?'transform:rotate(180deg)':''}">▼</span>
           </div>
         </div>
@@ -5355,8 +5874,11 @@ function renderDash(){
                 <div style="font-family:var(--fh);font-weight:700;font-size:14px;color:var(--tel)">${fmtQty(totalProd)}L</div>
               </div>`:''}
               <div style="background:var(--surf2);border-radius:var(--rs);padding:7px 10px;${totalProd>0?'':'grid-column:span 2'}">
-                <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">📊 Net Profit</div>
-                <div style="font-family:var(--fh);font-weight:700;font-size:14px;color:${net>=0?'var(--grn)':'var(--cor)'}">${net>=0?'+':'−'}₹${Math.abs(net).toFixed(0)}</div>
+                <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">🏦 Total Balance</div>
+                <div style="font-family:var(--fh);font-weight:700;font-size:14px;color:${balPos?'var(--grn)':'var(--cor)'}">${balPos?'+':'−'}₹${Math.abs(balance).toFixed(0)}</div>
+                ${monLoansIn>0?`<div style="font-size:9px;color:var(--blue);margin-top:2px">+₹${monLoansIn.toFixed(0)} loan in</div>`:''}
+                ${monLoansRepaid>0?`<div style="font-size:9px;color:var(--cor);margin-top:1px">−₹${monLoansRepaid.toFixed(0)} repaid</div>`:''}
+                ${monUdhariPaid>0?`<div style="font-size:9px;color:var(--amb);margin-top:1px">−₹${monUdhariPaid.toFixed(0)} udhari</div>`:''}
               </div>
               ${wiInc>0?`<div style="background:var(--surf2);border-radius:var(--rs);padding:7px 10px;grid-column:span 2">
                 <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">🚶 Walk-in Sales</div>
@@ -5428,28 +5950,55 @@ function openLifetimeStats(){
   openM('m-lifetime-stats');
 }
 function renderLifetimeStats(){
-  // ── Income (all payments received) ──
+  // ── Dairy Income (all payments received — never includes loans) ──
   const consIncome=S.payments.reduce((s,p)=>s+p.amount,0);
   const bulkIncome=S.bulkPayments.reduce((s,p)=>s+p.amount,0);
   const walkInAllTime=(S.walkInSales||[]).reduce((s,w)=>s+w.total,0);
   const archivedIncome=S.consumers.reduce((s,c)=>s+Object.values(c.archive||{}).reduce((ss,a)=>ss+(a.paid||0),0),0);
   const totalIncome=consIncome+bulkIncome+walkInAllTime+archivedIncome;
 
-  // ── Expenses (live + archived) ──
-  const totalExpLive=S.expenses.reduce((s,e)=>s+e.amt,0);
+  // ── Loans received (liability — money in but must be repaid) ──
+  const totalLoansIn=(S.loans||[]).reduce((s,l)=>s+l.amt,0);
+  // Loan repayments already made (money out)
+  const totalLoansRepaid=(S.loans||[]).reduce((s,l)=>s+(l.repaidAmt||0),0);
+  // Outstanding loan liabilities still owed
+  const loanDue=(S.loans||[]).filter(l=>l.status!=='cleared').reduce((s,l)=>s+(l.amt-(l.repaidAmt||0)),0);
+
+  // ── Udhari (credit purchases) ──
+  // Amount already paid on udhari entries
+  const totalUdhariPaid=(S.udhari||[]).reduce((s,u)=>s+u.paid,0);
+  // Outstanding udhari still owed
+  const udhariDue=(S.udhari||[]).filter(u=>u.status!=='cleared').reduce((s,u)=>s+u.remaining,0);
+
+  // ── Expenses (live + archived — excludes loan repayments and udhari partial payments) ──
+  const totalExpLive=S.expenses.filter(e=>!e._fromUdhari).reduce((s,e)=>s+e.amt,0);
   const totalExpArchived=Object.values(S.expArchive||{}).reduce((s,a)=>s+a.total,0);
   const totalExp=totalExpLive+totalExpArchived;
 
-  // ── Profit ──
-  const profit=totalIncome-totalExp;
-  const profPos=profit>=0;
+  // ── Total Balance = Dairy Income + Loans In − Expenses − Loans Repaid − Udhari Paid ──
+  const totalBalance=totalIncome+totalLoansIn-totalExp-totalLoansRepaid-totalUdhariPaid;
+  const balPos=totalBalance>=0;
+
   const profCard=document.getElementById('lt-profit-card');
-  profCard.style.background=profPos?'var(--gxl)':'var(--cxl)';
-  profCard.style.borderColor=profPos?'var(--grn)':'var(--cor)';
-  document.getElementById('lt-profit').style.color=profPos?'var(--grn)':'var(--cor)';
-  document.getElementById('lt-profit').textContent=(profPos?'+':'−')+'₹'+Math.abs(profit).toFixed(0);
+  profCard.style.background=balPos?'var(--gxl)':'var(--cxl)';
+  profCard.style.borderColor=balPos?'var(--grn)':'var(--cor)';
+  document.getElementById('lt-profit').style.color=balPos?'var(--grn)':'var(--cor)';
+  document.getElementById('lt-profit').textContent=(balPos?'+':'−')+'₹'+Math.abs(totalBalance).toFixed(0);
   document.getElementById('lt-income').textContent='₹'+totalIncome.toFixed(0);
   document.getElementById('lt-expenses').textContent='₹'+totalExp.toFixed(0);
+  const liEl=document.getElementById('lt-loans-in');if(liEl)liEl.textContent='₹'+totalLoansIn.toFixed(0);
+  const lrEl=document.getElementById('lt-loans-repaid');if(lrEl)lrEl.textContent='₹'+totalLoansRepaid.toFixed(0);
+  const upEl=document.getElementById('lt-udhari-paid');if(upEl)upEl.textContent='₹'+totalUdhariPaid.toFixed(0);
+  // Show liabilities row only if any outstanding
+  const libRow=document.getElementById('lt-liabilities-row');
+  if(libRow){
+    const hasLiab=(loanDue>0||udhariDue>0);
+    libRow.style.display=hasLiab?'':'none';
+    const ldEl=document.getElementById('lt-loan-due');if(ldEl)ldEl.textContent='₹'+loanDue.toFixed(0);
+    const udEl=document.getElementById('lt-udhari-due');if(udEl)udEl.textContent='₹'+udhariDue.toFixed(0);
+    const ldWrap=document.getElementById('lt-loan-due-wrap');if(ldWrap)ldWrap.style.display=loanDue>0?'':'none';
+    const udWrap=document.getElementById('lt-udhari-due-wrap');if(udWrap)udWrap.style.display=udhariDue>0?'':'none';
+  }
 
   // ── Per-cow lactation diary ──
   const cowEl=document.getElementById('lt-cow-charts');
@@ -5975,7 +6524,9 @@ function shareConsumerWhatsApp(id){
 
   if(carryOver>0.5)msg.push(`+${r(carryOver)}(pahle ka)`);
 
-  msg.push(`Total ${r(milkValue+pnrVal+carryOver)}/-`);
+  const barterAmt=(S.consPurchases||[]).filter(p=>p.consumerId===id&&p.mode==='deduct'&&p.date>=cycle.start&&p.date<=cycle.end).reduce((s,p)=>s+p.amount,0);
+  if(barterAmt>0) msg.push(`-${r(barterAmt)}(barter/samaan)`);
+  msg.push(`Total ${r(Math.max(0,milkValue+pnrVal+carryOver-barterAmt))}/-`);
 
   if(paidInCycle>0){
     msg.push('');
@@ -6243,6 +6794,386 @@ function renderCowMonthly(){
     </div>`).join('');
 }
 
+
+// ══════════════════════════════════════
+//  LOANS — Personal money in dairy funds
+// ══════════════════════════════════════
+function openLoanModal(){
+  document.getElementById('loan-amt').value='';
+  document.getElementById('loan-date').value=today();
+  document.getElementById('loan-source').value='';
+  document.getElementById('loan-note').value='';
+  document.getElementById('loan-status').value='pending';
+  renderLoanList();
+  openM('m-loan');
+}
+
+function saveLoan(){
+  const amt=parseFloat(document.getElementById('loan-amt').value);
+  const date=document.getElementById('loan-date').value;
+  if(!amt||!date){toast('⚠️ Amount and date required');return;}
+  if(!S.loans)S.loans=[];
+  S.loans.unshift({
+    id:uid(),
+    amt:parseFloat(amt.toFixed(2)),
+    date,
+    source:document.getElementById('loan-source').value.trim(),
+    note:document.getElementById('loan-note').value.trim(),
+    status:document.getElementById('loan-status').value,
+    repaidAmt:0,
+    createdAt:today()
+  });
+  save();
+  document.getElementById('loan-amt').value='';
+  document.getElementById('loan-source').value='';
+  document.getElementById('loan-note').value='';
+  renderLoanList();
+  renderDash();
+  toast(`✅ ₹${amt} loan recorded`);
+}
+
+function renderLoanList(){
+  if(!S.loans)S.loans=[];
+  const el=document.getElementById('loan-list');if(!el)return;
+  const pending=S.loans.filter(l=>l.status!=='cleared');
+  const cleared=S.loans.filter(l=>l.status==='cleared');
+  const totalPending=pending.reduce((s,l)=>s+(l.amt-(l.repaidAmt||0)),0);
+  const totEl=document.getElementById('loan-total');
+  if(totEl)totEl.textContent=totalPending>0?`₹${totalPending.toFixed(0)} pending`:'All cleared';
+
+  if(!S.loans.length){
+    el.innerHTML=`<div style="text-align:center;padding:12px;color:var(--t3);font-size:12px">No loans recorded yet.</div>`;
+    return;
+  }
+  el.innerHTML=[...pending,...cleared].map(l=>{
+    const remaining=parseFloat((l.amt-(l.repaidAmt||0)).toFixed(2));
+    const statusColor=l.status==='cleared'?'var(--grn)':l.status==='partial'?'var(--amb)':'var(--cor)';
+    const statusLabel=l.status==='cleared'?'✅ Cleared':l.status==='partial'?'🔄 Partial':'⏳ Pending';
+    // Payment history log
+    const payHist=(l.payments||[]).length>0?`
+      <div style="margin-top:6px;padding-top:6px;border-top:1px dashed var(--bdr)">
+        <div style="font-size:10px;font-weight:700;color:var(--t3);margin-bottom:3px">PAYMENT HISTORY</div>
+        ${(l.payments||[]).map(p=>`<div style="font-size:11px;color:var(--t2);display:flex;justify-content:space-between"><span>${fmtD(p.date)}</span><span style="color:var(--grn);font-weight:700">−₹${p.amt.toFixed(0)}</span></div>`).join('')}
+      </div>`:'';
+    return `<div id="loan-card-${l.id}" style="padding:10px 12px;background:var(--surf2);border-radius:var(--rs);margin-bottom:7px;border:1.5px solid var(--bdr)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:13px">₹${l.amt.toFixed(0)} <span style="font-size:10px;color:${statusColor};font-weight:700">${statusLabel}</span></div>
+          <div style="font-size:10px;color:var(--t3);margin-top:2px">${fmtD(l.date)}${l.source?' • '+l.source:''}${l.note?' • '+l.note:''}</div>
+          ${remaining>0&&l.status!=='cleared'?`<div style="font-size:11px;color:var(--cor);font-weight:700;margin-top:3px">Remaining: ₹${remaining.toFixed(0)}</div>`:''}
+          ${payHist}
+        </div>
+        <div style="display:flex;gap:4px;flex-shrink:0;margin-left:8px">
+          ${l.status!=='cleared'?`<button onclick="markLoanRepaid('${l.id}')" style="background:var(--gxl);color:var(--grn);border:none;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;cursor:pointer">💳 Pay</button>`:''}
+          <button onclick="deleteLoan('${l.id}')" style="background:var(--cxl);color:var(--cor);border:none;border-radius:6px;padding:3px 7px;font-size:11px;font-weight:700;cursor:pointer">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function markLoanRepaid(id){
+  // Open inline payment form in the loan card instead of using prompt
+  const formId='loan-pay-form-'+id;
+  const existing=document.getElementById(formId);
+  if(existing){existing.style.display=existing.style.display==='none'?'':'none';return;}
+  const card=document.getElementById('loan-card-'+id);
+  if(!card)return;
+  const l=S.loans.find(x=>x.id===id);if(!l)return;
+  const remaining=l.amt-(l.repaidAmt||0);
+  const form=document.createElement('div');
+  form.id=formId;
+  form.style.cssText='margin-top:8px;padding-top:8px;border-top:1px solid var(--bdr)';
+  form.innerHTML=`
+    <div style="font-size:11px;font-weight:700;color:var(--t2);margin-bottom:5px">💳 Record Payment (₹${remaining.toFixed(0)} remaining)</div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <input id="loan-pay-amt-${id}" type="number" placeholder="Amount paid" min="1" max="${remaining}" style="flex:1;padding:7px 9px;border:1.5px solid var(--bdr);border-radius:7px;font-size:13px;background:var(--surf2);color:var(--tex);outline:none">
+      <input id="loan-pay-date-${id}" type="date" value="${today()}" style="flex:1;padding:7px 9px;border:1.5px solid var(--bdr);border-radius:7px;font-size:13px;background:var(--surf2);color:var(--tex);outline:none">
+    </div>
+    <div style="display:flex;gap:6px;margin-top:6px">
+      <button onclick="submitLoanPayment('${id}')" style="flex:2;padding:6px 10px;background:var(--grn);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer">✅ Save Payment</button>
+      <button onclick="document.getElementById('${formId}').style.display='none'" style="flex:1;padding:6px;background:var(--surf2);color:var(--t2);border:1.5px solid var(--bdr);border-radius:7px;font-size:12px;font-weight:700;cursor:pointer">Cancel</button>
+    </div>`;
+  card.appendChild(form);
+}
+
+function submitLoanPayment(id){
+  const amtEl=document.getElementById('loan-pay-amt-'+id);
+  const dateEl=document.getElementById('loan-pay-date-'+id);
+  const repaid=parseFloat(amtEl?amtEl.value:'');
+  if(!repaid||isNaN(repaid)||repaid<=0){toast('⚠️ Enter a valid amount');return;}
+  const payDate=dateEl?dateEl.value:today();
+  S.loans=S.loans.map(l=>{
+    if(l.id!==id)return l;
+    const newRepaid=(l.repaidAmt||0)+repaid;
+    const newStatus=newRepaid>=l.amt?'cleared':newRepaid>0?'partial':'pending';
+    // Track payment history within the loan record only — never touches expenses
+    const payments=[...(l.payments||[]),{amt:parseFloat(repaid.toFixed(2)),date:payDate}];
+    return{...l,repaidAmt:parseFloat(newRepaid.toFixed(2)),status:newStatus,payments};
+  });
+  save();renderLoanList();renderDash();
+  toast('✅ Payment of ₹'+repaid.toFixed(0)+' recorded');
+}
+
+function deleteLoan(id){
+  if(!confirm('Delete this loan record?'))return;
+  S.loans=S.loans.filter(l=>l.id!==id);
+  save();renderLoanList();renderDash();toast('🗑️ Loan removed');
+}
+
+// ══════════════════════════════════════
+//  UDHARI — Credit purchases
+// ══════════════════════════════════════
+function openUdhariModal(){
+  document.getElementById('ud-name').value='';
+  document.getElementById('ud-mrp').value='';
+  document.getElementById('ud-paid').value='';
+  document.getElementById('ud-remaining').value='';
+  document.getElementById('ud-date').value=today();
+  document.getElementById('ud-supplier').value='';
+  renderUdhariList();
+  openM('m-udhari');
+}
+
+function calcUdhariRemaining(){
+  const mrp=parseFloat(document.getElementById('ud-mrp').value)||0;
+  const paid=parseFloat(document.getElementById('ud-paid').value)||0;
+  const rem=Math.max(0,mrp-paid);
+  document.getElementById('ud-remaining').value=rem>0?rem.toFixed(0):'0';
+}
+
+function saveUdhari(){
+  const name=document.getElementById('ud-name').value.trim();
+  const mrp=parseFloat(document.getElementById('ud-mrp').value)||0;
+  const paid=parseFloat(document.getElementById('ud-paid').value)||0;
+  const date=document.getElementById('ud-date').value;
+  if(!name||!mrp||!date){toast('⚠️ Name, MRP and date required');return;}
+  if(!S.udhari)S.udhari=[];
+  const remaining=parseFloat(Math.max(0,mrp-paid).toFixed(2));
+  S.udhari.unshift({
+    id:uid(),
+    name,
+    mrp:parseFloat(mrp.toFixed(2)),
+    paid:parseFloat(paid.toFixed(2)),
+    remaining,
+    date,
+    supplier:document.getElementById('ud-supplier').value.trim(),
+    status:remaining<=0?'cleared':'pending',
+    createdAt:today()
+  });
+  save();
+  document.getElementById('ud-name').value='';
+  document.getElementById('ud-mrp').value='';
+  document.getElementById('ud-paid').value='';
+  document.getElementById('ud-remaining').value='';
+  renderUdhariList();
+  renderExp();
+  toast(`✅ ${name} udhari recorded — ₹${remaining} remaining`);
+}
+
+function renderUdhariList(){
+  if(!S.udhari)S.udhari=[];
+  const el=document.getElementById('ud-list');if(!el)return;
+  const pending=S.udhari.filter(u=>u.status!=='cleared');
+  const totalPending=pending.reduce((s,u)=>s+u.remaining,0);
+  const totEl=document.getElementById('ud-pending-total');
+  if(totEl)totEl.textContent=totalPending>0?`₹${totalPending.toFixed(0)} pending`:'All cleared';
+  if(!S.udhari.length){
+    el.innerHTML=`<div style="text-align:center;padding:12px;color:var(--t3);font-size:12px">No udhari entries yet.</div>`;
+    return;
+  }
+  el.innerHTML=S.udhari.map(u=>{
+    // Payment history log
+    const payHist=(u.payments||[]).length>0?`
+      <div style="margin-top:6px;padding-top:5px;border-top:1px dashed var(--bdr)">
+        <div style="font-size:10px;font-weight:700;color:var(--t3);margin-bottom:3px">PAYMENT HISTORY</div>
+        ${(u.payments||[]).map(p=>`<div style="font-size:11px;color:var(--t2);display:flex;justify-content:space-between"><span>${fmtD(p.date)}</span><span style="color:var(--grn);font-weight:700">−₹${p.amt.toFixed(0)}</span></div>`).join('')}
+      </div>`:'';
+    return `<div id="ud-card-${u.id}" style="padding:10px 12px;background:var(--surf2);border-radius:var(--rs);margin-bottom:7px;border:1.5px solid var(--bdr)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:13px">${u.name} <span style="font-size:9px;background:${u.status==='cleared'?'var(--gxl)':'var(--cxl)'};color:${u.status==='cleared'?'var(--grn)':'var(--cor)'};border-radius:4px;padding:1px 5px;font-weight:700">${u.status==='cleared'?'✅ Cleared':'⏳ Pending'}</span></div>
+          <div style="font-size:10px;color:var(--t3);margin-top:2px">${fmtD(u.date)}${u.supplier?' • '+u.supplier:''}</div>
+          <div style="font-size:11px;color:var(--t2);margin-top:3px">MRP ₹${u.mrp.toFixed(0)} · Paid ₹${u.paid.toFixed(0)} · <span style="color:${u.remaining>0?'var(--cor)':'var(--grn)'};font-weight:700">₹${u.remaining.toFixed(0)} due</span></div>
+          ${payHist}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0;margin-left:8px">
+          ${u.status!=='cleared'?`<button onclick="payUdhari('${u.id}')" title="Record a partial or full payment" style="background:var(--bxl);color:var(--blue);border:1.5px solid var(--bdr);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap">💳 Pay</button>`:''}
+          ${u.status!=='cleared'?`<button onclick="clearUdhari('${u.id}')" title="Mark fully cleared" style="background:var(--gxl);color:var(--grn);border:none;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap">✅ Clear</button>`:''}
+          <button onclick="deleteUdhari('${u.id}')" style="background:var(--cxl);color:var(--cor);border:none;border-radius:6px;padding:3px 7px;font-size:11px;font-weight:700;cursor:pointer">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function payUdhari(id){
+  // Inline payment form — does NOT touch expenses
+  const formId='ud-pay-form-'+id;
+  const existing=document.getElementById(formId);
+  if(existing){existing.style.display=existing.style.display==='none'?'':'none';return;}
+  const card=document.getElementById('ud-card-'+id);
+  if(!card)return;
+  const u=S.udhari.find(x=>x.id===id);if(!u)return;
+  const form=document.createElement('div');
+  form.id=formId;
+  form.style.cssText='margin-top:8px;padding-top:8px;border-top:1px solid var(--bdr)';
+  form.innerHTML=`
+    <div style="font-size:11px;font-weight:700;color:var(--t2);margin-bottom:5px">💳 Record Payment (₹${u.remaining.toFixed(0)} remaining)</div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <input id="ud-pay-amt-${id}" type="number" placeholder="Amount paid" min="1" max="${u.remaining}" style="flex:1;padding:7px 9px;border:1.5px solid var(--bdr);border-radius:7px;font-size:13px;background:var(--surf2);color:var(--tex);outline:none">
+      <input id="ud-pay-date-${id}" type="date" value="${today()}" style="flex:1;padding:7px 9px;border:1.5px solid var(--bdr);border-radius:7px;font-size:13px;background:var(--surf2);color:var(--tex);outline:none">
+    </div>
+    <div style="font-size:10px;color:var(--t3);margin-top:4px;line-height:1.4">Payment stays in Udhari records only — not added to Expenses.</div>
+    <div style="display:flex;gap:6px;margin-top:6px">
+      <button onclick="submitUdhariPayment('${id}')" style="flex:2;padding:6px 10px;background:var(--amb);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer">💾 Save Payment</button>
+      <button onclick="document.getElementById('${formId}').style.display='none'" style="flex:1;padding:6px;background:var(--surf2);color:var(--t2);border:1.5px solid var(--bdr);border-radius:7px;font-size:12px;font-weight:700;cursor:pointer">Cancel</button>
+    </div>`;
+  card.appendChild(form);
+}
+
+function submitUdhariPayment(id){
+  const amtEl=document.getElementById('ud-pay-amt-'+id);
+  const dateEl=document.getElementById('ud-pay-date-'+id);
+  const payAmt=parseFloat(amtEl?amtEl.value:'');
+  if(!payAmt||isNaN(payAmt)||payAmt<=0){toast('⚠️ Enter a valid amount');return;}
+  const payDate=dateEl?dateEl.value:today();
+  S.udhari=S.udhari.map(u=>{
+    if(u.id!==id)return u;
+    const newPaid=parseFloat((u.paid+payAmt).toFixed(2));
+    const newRemaining=parseFloat(Math.max(0,u.mrp-newPaid).toFixed(2));
+    const newStatus=newRemaining<=0?'cleared':'pending';
+    // Track payment history within udhari record only
+    const payments=[...(u.payments||[]),{amt:parseFloat(payAmt.toFixed(2)),date:payDate}];
+    return{...u,paid:newPaid,remaining:newRemaining,status:newStatus,payments};
+  });
+  save();renderUdhariList();renderExp();renderDash();
+  toast('✅ Payment of ₹'+payAmt.toFixed(0)+' recorded on udhari');
+}
+
+function clearUdhari(id){
+  const u=S.udhari.find(x=>x.id===id);if(!u)return;
+  // Mark as cleared — remaining becomes 0, paid becomes full MRP
+  // Only add to expenses if there's remaining balance not yet tracked
+  S.udhari=S.udhari.map(x=>{
+    if(x.id!==id)return x;
+    return{...x,status:'cleared',remaining:0,paid:x.mrp,clearedAt:today()};
+  });
+  // Add only the truly outstanding balance to expenses (avoid double-counting already-paid portion)
+  if(u.remaining>0){
+    const cat=parseExpCategory(u.name);
+    S.expenses.unshift({
+      id:uid(),
+      desc:u.name+(u.supplier?' ('+u.supplier+')':''),
+      amt:u.remaining,  // only the REMAINING (unpaid) amount goes to expenses
+      date:today(),
+      cat,
+      note:`Udhari final payment. MRP ₹${u.mrp}, prev paid ₹${u.paid}`,
+      _fromUdhari:id
+    });
+  }
+  save();renderUdhariList();renderExp();renderDash();
+  toast(`✅ ${u.name} cleared`+(u.remaining>0?` — ₹${u.remaining.toFixed(0)} added to expenses`:''));
+}
+
+function deleteUdhari(id){
+  if(!confirm('Delete this udhari entry?'))return;
+  S.udhari=S.udhari.filter(u=>u.id!==id);
+  // Also remove any linked expense entry
+  S.expenses=S.expenses.filter(e=>e._fromUdhari!==id);
+  save();renderUdhariList();renderExp();renderDash();toast('🗑️ Udhari removed');
+}
+
+
+// ══════════════════════════════════════
+//  CONSUMER BARTER / PURCHASES
+//  Items bought FROM consumer → deducted from their milk bill
+//  Excess credit carries to next cycle automatically via getConsBal
+// ══════════════════════════════════════
+function openConsBarterModal(cid){
+  const c=S.consumers.find(x=>x.id===cid);if(!c)return;
+  document.getElementById('cb-cid').value=cid;
+  document.getElementById('cons-barter-title').textContent='🔄 Barter — '+c.name;
+  document.getElementById('cb-desc').value='';
+  document.getElementById('cb-amt').value='';
+  document.getElementById('cb-dt').value=today();
+  document.getElementById('cb-mode').value='deduct';
+  document.getElementById('cb-note').value='';
+  openM('m-cons-barter');
+}
+
+function saveConsBarter(){
+  const cid=document.getElementById('cb-cid').value;
+  const desc=document.getElementById('cb-desc').value.trim();
+  const amt=parseFloat(document.getElementById('cb-amt').value);
+  const date=document.getElementById('cb-dt').value;
+  const mode=document.getElementById('cb-mode').value;
+  if(!desc||!amt||!date){toast('⚠️ Fill all required fields');return;}
+  const c=S.consumers.find(x=>x.id===cid);if(!c)return;
+  if(!S.consPurchases)S.consPurchases=[];
+  S.consPurchases.unshift({id:uid(),consumerId:cid,consumerName:c.name,desc,amount:parseFloat(amt.toFixed(2)),date,mode,note:document.getElementById('cb-note').value.trim()});
+  // Log as expense in your records (you spent money buying from them)
+  if(mode==='deduct'||mode==='cash'){
+    const cat=parseExpCategory(desc);
+    S.expenses.unshift({id:uid(),desc:`[Barter:${c.name}] ${desc}`,amt,date,cat,note:'Purchase from consumer'});
+  }
+  save();closeM('m-cons-barter');
+  renderConsBarterList(cid);
+  viewConsDet(cid);
+  renderDash();
+  const barterCredit=getConsBarterCredit(cid);
+  if(barterCredit>0.01){
+    toast(`✅ ₹${amt} deducted. ₹${barterCredit.toFixed(0)} credit carries to next month`);
+  } else {
+    toast(mode==='deduct'?`✅ ₹${amt} deducted from ${c.name}'s bill`:`✅ ₹${amt} purchase logged`);
+  }
+}
+
+function deleteConsBarter(id,cid){
+  const p=S.consPurchases.find(x=>x.id===id);
+  if(p)S.expenses=S.expenses.filter(e=>!(e.note==='Purchase from consumer'&&e.amt===p.amount&&e.date===p.date));
+  S.consPurchases=(S.consPurchases||[]).filter(x=>x.id!==id);
+  save();
+  renderConsBarterList(cid);
+  viewConsDet(cid);
+  renderDash();
+  toast('🗑️ Barter entry removed');
+}
+
+function renderConsBarterList(cid){
+  const el=document.getElementById('det-barter-list');if(!el)return;
+  const items=(S.consPurchases||[]).filter(p=>p.consumerId===cid).sort((a,b)=>b.date.localeCompare(a.date));
+  const totalDeducted=items.filter(p=>p.mode==='deduct').reduce((s,p)=>s+p.amount,0);
+  const credit=getConsBarterCredit(cid);
+
+  if(!items.length){
+    el.innerHTML=`<div class="es" style="padding:14px"><div class="et">No barter entries</div><div class="ex">Tap ➕ to record items bought from this consumer</div></div>`;
+    return;
+  }
+  let html='';
+  if(totalDeducted>0){
+    html+=`<div style="padding:8px 13px;background:${credit>0?'var(--axl)':'var(--gxl)'};border-bottom:1px solid var(--bdr)">
+      <div style="font-size:12px;font-weight:700;color:${credit>0?'var(--amb)':'var(--grn)'}">
+        Total deducted: ₹${totalDeducted.toFixed(0)}
+        ${credit>0?` · <span style="color:var(--amb)">₹${credit.toFixed(0)} credit carries forward</span>`:''}
+      </div>
+    </div>`;
+  }
+  html+=items.map(p=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 13px;border-bottom:1px solid var(--bdr)">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:700">${p.desc}</div>
+        <div style="font-size:10px;color:var(--t3)">${fmtD(p.date)} • ${p.mode==='deduct'?'🔄 Deducted from bill':'💵 Cash'}</div>
+        ${p.note?`<div style="font-size:10px;color:var(--t3)">${p.note}</div>`:''}
+      </div>
+      <div style="font-weight:700;color:${p.mode==='deduct'?'var(--grn)':'var(--tex)'};flex-shrink:0">
+        ${p.mode==='deduct'?'−':''}₹${p.amount.toFixed(0)}
+      </div>
+      <button onclick="deleteConsBarter('${p.id}','${cid}')" style="background:var(--cxl);color:var(--cor);border:none;border-radius:6px;width:28px;height:28px;font-size:12px;cursor:pointer;flex-shrink:0">🗑️</button>
+    </div>`).join('');
+  el.innerHTML=html;
+}
+
 // ── INIT ──
 runArchive();
 applyTheme();
@@ -6250,6 +7181,74 @@ checkDriveToken();
 tryAutoBackup();
 renderDash();
 cowDate=today();
+
+<!-- ═══ TOTAL BALANCE BREAKDOWN MODAL ═══ -->
+</script>
+<div class="mo" id="m-total-balance"><div class="ms">
+  <div class="mh"></div>
+  <div class="mt">🏦 Total Balance Breakdown</div>
+  <div id="tbal-content"></div>
+  <button class="btn bs" style="margin-top:12px" onclick="closeM('m-total-balance')">Close</button>
+</div></div>
+<script>
+function showTotalBalanceBreakdown(){
+  // Dairy income
+  const consInc=S.payments.reduce((s,p)=>s+p.amount,0);
+  const bulkInc=S.bulkPayments.reduce((s,p)=>s+p.amount,0);
+  const wiInc=(S.walkInSales||[]).reduce((s,w)=>s+w.total,0);
+  const archInc=S.consumers.reduce((s,c)=>s+Object.values(c.archive||{}).reduce((ss,a)=>ss+(a.paid||0),0),0);
+  const totalDairyInc=consInc+bulkInc+wiInc+archInc;
+  // Loans
+  const totalLoansIn=(S.loans||[]).reduce((s,l)=>s+l.amt,0);
+  const totalLoansRepaid=(S.loans||[]).reduce((s,l)=>s+(l.repaidAmt||0),0);
+  const loanDue=(S.loans||[]).filter(l=>l.status!=='cleared').reduce((s,l)=>s+(l.amt-(l.repaidAmt||0)),0);
+  // Udhari
+  const totalUdhariPaid=(S.udhari||[]).reduce((s,u)=>s+u.paid,0);
+  const udhariDue=(S.udhari||[]).filter(u=>u.status!=='cleared').reduce((s,u)=>s+u.remaining,0);
+  // Expenses (excluding udhari-sourced to avoid double-count)
+  const expLive=S.expenses.filter(e=>!e._fromUdhari).reduce((s,e)=>s+e.amt,0);
+  const expArch=Object.values(S.expArchive||{}).reduce((s,a)=>s+a.total,0);
+  const totalExp=expLive+expArch;
+  // Total balance
+  const bal=totalDairyInc+totalLoansIn-totalExp-totalLoansRepaid-totalUdhariPaid;
+  const balPos=bal>=0;
+
+  const row=(icon,label,amt,color,sign)=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--bdr)">
+      <span style="font-size:13px;font-weight:700;color:var(--t2)">${icon} ${label}</span>
+      <span style="font-family:var(--fh);font-weight:700;font-size:14px;color:${color}">${sign}₹${amt.toFixed(0)}</span>
+    </div>`;
+
+  document.getElementById('tbal-content').innerHTML=`
+    <!-- Inflows -->
+    <div style="background:var(--gxl);border-radius:var(--rs);padding:10px 13px;margin-bottom:10px;border:1.5px solid var(--grn)">
+      <div style="font-size:10px;font-weight:700;color:var(--grn);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">➕ Inflows (Money In)</div>
+      ${row('🥛','Dairy Income (payments received)',totalDairyInc,'var(--grn)','+  ')}
+      ${totalLoansIn>0?row('🏦','Loans Received (liability)',totalLoansIn,'var(--blue)','+  '):''}
+    </div>
+    <!-- Outflows -->
+    <div style="background:var(--cxl);border-radius:var(--rs);padding:10px 13px;margin-bottom:10px;border:1.5px solid var(--cor)">
+      <div style="font-size:10px;font-weight:700;color:var(--cor);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">➖ Outflows (Money Out)</div>
+      ${row('💸','Expenses',totalExp,'var(--cor)','−  ')}
+      ${totalLoansRepaid>0?row('🔄','Loan Repayments Made',totalLoansRepaid,'var(--cor)','−  '):''}
+      ${totalUdhariPaid>0?row('🛒','Udhari Paid (at purchase)',totalUdhariPaid,'var(--amb)','−  '):''}
+    </div>
+    <!-- Balance -->
+    <div style="background:${balPos?'var(--gxl)':'var(--cxl)'};border-radius:var(--rs);padding:12px 13px;border:2px solid ${balPos?'var(--grn)':'var(--cor)'};text-align:center;margin-bottom:${(loanDue>0||udhariDue>0)?'10px':'0'}">
+      <div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Total Balance</div>
+      <div style="font-family:var(--fh);font-weight:700;font-size:28px;color:${balPos?'var(--grn)':'var(--cor)'}">${balPos?'+':'−'}₹${Math.abs(bal).toFixed(0)}</div>
+    </div>
+    <!-- Pending liabilities warning -->
+    ${(loanDue>0||udhariDue>0)?`
+    <div style="background:var(--axl);border-radius:var(--rs);padding:10px 13px;border:1.5px solid var(--amb)">
+      <div style="font-size:10px;font-weight:700;color:var(--amb);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">⚠️ Still Owed (Pending Liabilities)</div>
+      ${loanDue>0?row('🏦','Loan Balance Still Due',loanDue,'var(--cor)',''):''}
+      ${udhariDue>0?row('🛒','Udhari Balance Still Due',udhariDue,'var(--amb)',''):''}
+      <div style="font-size:10px;color:var(--t3);margin-top:6px;line-height:1.5">These are not yet reflected in your balance — they represent future outflows.</div>
+    </div>`:''}
+  `;
+  openM('m-total-balance');
+}
 </script>
 </body>
 </html>
