@@ -814,14 +814,14 @@ input:checked+.tsl:before{transform:translateX(20px)}
 <div class="scr" id="s-cons">
   <div class="hdr">
     <div><div class="htit">Consumers</div><div class="hsub" id="cons-cnt">0 consumers</div></div>
-    <div class="hacts"><div class="hbtn" onclick="openConsModal()">➕</div></div>
+    <div class="hacts"><div class="hbtn" id="cons-sort-btn" onclick="toggleConsSort()" title="Reorder consumers">⇅</div><div class="hbtn" onclick="openConsModal()">➕</div></div>
   </div>
   <div class="body">
-    <div style="background:var(--bxl);border:1.5px solid var(--bdr);border-radius:var(--rs);padding:9px 12px;margin-bottom:9px;font-size:11px;color:var(--t2);line-height:1.5">
+    <div style="background:var(--bxl);border:1.5px solid var(--bdr);border-radius:var(--rs);padding:9px 12px;margin-bottom:9px;font-size:11px;color:var(--t2);line-height:1.5" id="cons-hint">
       💡 <b>Long-press</b> any name to Edit or Delete. Tap to open profile.
     </div>
-    <div class="sw"><span class="swi">🔍</span><input class="si" id="cons-srch" placeholder="Search name or phone..." oninput="renderCons()"></div>
-    <div class="chs">
+    <div class="sw" id="cons-srch-wrap"><span class="swi">🔍</span><input class="si" id="cons-srch" placeholder="Search name or phone..." oninput="renderCons()"></div>
+    <div class="chs" id="cons-chs">
       <div class="ch on" onclick="setConsF('all',this)">All</div>
       <div class="ch off" onclick="setConsF('active',this)">Active</div>
       <div class="ch off" onclick="setConsF('pending',this)">With Dues</div>
@@ -882,8 +882,8 @@ input:checked+.tsl:before{transform:translateX(20px)}
 <!-- ═══ BULK BUYERS ═══ -->
 <div class="scr" id="s-bulk">
   <div class="hdr">
-    <div><div class="htit">Bulk Buyers</div><div class="hsub">Tap buyer to view details</div></div>
-    <div class="hacts"><div class="hbtn" onclick="openBulkBuyerModal()">➕</div></div>
+    <div><div class="htit">Bulk Buyers</div><div class="hsub" id="bulk-hsub">Tap buyer to view details</div></div>
+    <div class="hacts"><div class="hbtn" id="bulk-sort-btn" onclick="toggleBulkSort()" title="Reorder buyers">⇅</div><div class="hbtn" onclick="openBulkBuyerModal()">➕</div></div>
   </div>
   <div class="body">
     <div class="sg" style="margin-bottom:10px">
@@ -1222,6 +1222,16 @@ input:checked+.tsl:before{transform:translateX(20px)}
     <div class="lp-btn" onclick="openExpEdit()"><span style="font-size:18px">✏️</span><div><div>Edit Expense</div><div style="font-size:11px;font-weight:400;color:var(--t3)">Update description, amount or date</div></div></div>
     <div class="lp-btn" onclick="confirmExpDelete()"><span style="font-size:18px">🗑️</span><div><div style="color:var(--cor)">Delete Expense</div><div style="font-size:11px;font-weight:400;color:var(--t3)">Permanently remove this entry</div></div></div>
     <button class="btn bs" style="margin-top:4px" onclick="closeExpLpSheet()">Cancel</button>
+  </div>
+</div>
+
+<!-- ═══ BULK BUYER LONG PRESS SHEET ═══ -->
+<div class="lp-ov" id="bulk-lp-ov" onclick="closeBulkLpSheet()">
+  <div class="lp-sh" onclick="event.stopPropagation()">
+    <div class="lp-nm" id="bulk-lp-nm">Buyer</div>
+    <div class="lp-btn" onclick="bulkLpEdit()"><span style="font-size:18px">✏️</span><div><div>Edit Buyer</div><div style="font-size:11px;font-weight:400;color:var(--t3)">Update name, rate, contact details</div></div></div>
+    <div class="lp-btn" onclick="bulkLpDelete()"><span style="font-size:18px">🗑️</span><div><div style="color:var(--cor)">Delete Buyer</div><div style="font-size:11px;font-weight:400;color:var(--t3)">Permanently remove this buyer</div></div></div>
+    <button class="btn bs" style="margin-top:4px" onclick="closeBulkLpSheet()">Cancel</button>
   </div>
 </div>
 
@@ -4952,6 +4962,27 @@ function lpDelete(){
   openM('m-del-cons-confirm');
 }
 
+// ── Bulk buyer long-press sheet — same 600ms hold pattern as consumers/expenses ──
+let bulkLpTimer=null,bulkLpCurrentId=null;
+function attachBulkLp(el,id){
+  const start=()=>{bulkLpTimer=setTimeout(()=>openBulkLpSheet(id),600);};
+  const end=()=>clearTimeout(bulkLpTimer);
+  el.addEventListener('touchstart',start,{passive:true});el.addEventListener('touchend',end);el.addEventListener('touchmove',end,{passive:true});
+  el.addEventListener('mousedown',start);el.addEventListener('mouseup',end);el.addEventListener('mouseleave',end);
+}
+function openBulkLpSheet(id){
+  bulkLpCurrentId=id;const b=S.bulkBuyers.find(x=>x.id===id);if(!b)return;
+  document.getElementById('bulk-lp-nm').textContent=b.name;
+  document.getElementById('bulk-lp-ov').classList.add('on');
+}
+function closeBulkLpSheet(){document.getElementById('bulk-lp-ov').classList.remove('on');}
+function bulkLpEdit(){closeBulkLpSheet();openBulkBuyerModal(bulkLpCurrentId);}
+function bulkLpDelete(){
+  const b=S.bulkBuyers.find(x=>x.id===bulkLpCurrentId);if(!b)return;
+  closeBulkLpSheet();
+  deleteBulkBuyer(bulkLpCurrentId);
+}
+
 // ── FORCE SNAPSHOT ALL MONTHS BEFORE DELETE ──
 // Removes stale snapshots and recreates them from live transactions
 // ensuring totalPaidP reflects ALL payments including post-snapshot ones
@@ -5437,6 +5468,37 @@ function saveCons(){
   save();closeM('m-cons');renderCons();renderDash();toast(eid?'✅ Updated':'✅ Consumer added');
 }
 function setConsF(v,el){consF=v;document.querySelectorAll('#s-cons .ch').forEach(c=>{c.classList.remove('on');c.classList.add('off');});el.classList.add('on');el.classList.remove('off');renderCons();}
+// ── Manual sort mode for consumers ──
+// Same pattern as bulk buyers: off by default (list shows in S.consumers array order,
+// which today just reflects insertion order), toggled via the header icon.
+// Search and filter chips are force-cleared on entry — reordering a filtered subset
+// would be ambiguous (what does "drag to position 2" even mean if you're only looking
+// at 3 of your 40 consumers?), so sort mode always operates on the complete list.
+let consSortMode=false;
+function toggleConsSort(){
+  consSortMode=!consSortMode;
+  const btn=document.getElementById('cons-sort-btn');
+  const hint=document.getElementById('cons-hint');
+  const srchWrap=document.getElementById('cons-srch-wrap');
+  const chs=document.getElementById('cons-chs');
+  if(consSortMode){
+    // Force the full, unfiltered list before entering sort mode
+    document.getElementById('cons-srch').value='';
+    consF='all';
+    document.querySelectorAll('#s-cons .ch').forEach(c=>{c.classList.remove('on');c.classList.add('off');});
+    document.querySelector('#s-cons .ch').classList.add('on');document.querySelector('#s-cons .ch').classList.remove('off');
+  }
+  if(btn){
+    btn.textContent=consSortMode?'✓':'⇅';
+    btn.style.background=consSortMode?'var(--grn)':'';
+    btn.style.color=consSortMode?'#fff':'';
+    btn.style.borderColor=consSortMode?'var(--grn)':'';
+  }
+  if(hint) hint.innerHTML=consSortMode?'📐 <b>Drag ☰</b> to reorder, then tap <b>✓</b> when done':'💡 <b>Long-press</b> any name to Edit or Delete. Tap to open profile.';
+  if(srchWrap) srchWrap.style.display=consSortMode?'none':'';
+  if(chs) chs.style.display=consSortMode?'none':'';
+  renderCons();
+}
 function renderCons(){
   const q=(document.getElementById('cons-srch').value||'').toLowerCase();
   let list=activeConsumers().filter(c=>{
@@ -5452,7 +5514,15 @@ function renderCons(){
   // Use DocumentFragment to batch all DOM inserts in one paint
   const frag=document.createDocumentFragment();
   list.forEach(c=>{
-    const div=document.createElement('div');div.className='li';
+    const div=document.createElement('div');div.className='li';div.setAttribute('data-id',c.id);
+    if(consSortMode){
+      div.style.cursor='default';
+      div.innerHTML=`<div class="cons-drag-handle" style="font-size:18px;color:var(--t3);padding:6px 4px;touch-action:none;cursor:grab">☰</div>
+        <div class="av" style="background:${avCol(c.name)}22;color:${avCol(c.name)}">${inits(c.name)}</div>
+        <div class="lin"><div class="lname">${c.name}</div><div class="lsub">${c.delivTime||'—'}</div></div>`;
+      frag.appendChild(div);
+      return;
+    }
     // Red flag: cycle ending within 1 day (today = end date, or tomorrow = end date).
     // No special "reset" logic needed — getCycleDates() always computes the CURRENT
     // cycle relative to today, so once the end date passes it naturally rolls forward
@@ -5473,6 +5543,86 @@ function renderCons(){
   });
   el.innerHTML='';
   el.appendChild(frag);
+  if(consSortMode) _attachConsDragHandlers(list.map(c=>c.id));
+}
+
+// ── Touch-based drag reorder for the consumer list ──
+// Same visual mechanics as the bulk buyer version (CSS transform during drag, single
+// commit on release), but the commit step uses a stable-merge instead of a raw splice:
+// consumers can have soft-deleted entries hidden inside S.consumers that never appear
+// in this list, and a plain index splice would silently scramble their positions.
+// This preserves any hidden entries exactly where they already were.
+function _attachConsDragHandlers(displayedIds){
+  const rows=[...document.querySelectorAll('#cons-list .li[data-id]')];
+  if(!rows.length)return;
+  const rowHeight=rows[0].offsetHeight;
+  let dragIdx=null,curIdx=null,startY=0;
+
+  function onStart(e,idx){
+    dragIdx=idx;curIdx=idx;
+    startY=(e.touches?e.touches[0].clientY:e.clientY);
+    rows[idx].style.position='relative';
+    rows[idx].style.zIndex='50';
+    rows[idx].style.boxShadow='0 4px 14px rgba(0,0,0,.18)';
+    rows[idx].style.background='var(--surf2)';
+    rows[idx].style.borderRadius='var(--rs)';
+    document.addEventListener('touchmove',onMove,{passive:false});
+    document.addEventListener('touchend',onEnd,{passive:true});
+    document.addEventListener('mousemove',onMove);
+    document.addEventListener('mouseup',onEnd);
+  }
+  function onMove(e){
+    if(dragIdx===null)return;
+    if(e.cancelable)e.preventDefault();
+    const y=(e.touches?e.touches[0].clientY:e.clientY);
+    const deltaY=y-startY;
+    rows[dragIdx].style.transform=`translateY(${deltaY}px)`;
+    const rawTarget=dragIdx+Math.round(deltaY/rowHeight);
+    const targetIdx=Math.max(0,Math.min(rows.length-1,rawTarget));
+    if(targetIdx!==curIdx){
+      rows.forEach((r,i)=>{
+        if(i===dragIdx)return;
+        const between=(targetIdx>curIdx)?(i>curIdx&&i<=targetIdx):(i<curIdx&&i>=targetIdx);
+        r.style.transition='transform .12s';
+        r.style.transform=between?`translateY(${targetIdx>curIdx?'-':''}${rowHeight}px)`:'';
+      });
+      curIdx=targetIdx;
+    }
+  }
+  function onEnd(){
+    if(dragIdx===null)return;
+    document.removeEventListener('touchmove',onMove);
+    document.removeEventListener('touchend',onEnd);
+    document.removeEventListener('mousemove',onMove);
+    document.removeEventListener('mouseup',onEnd);
+    if(curIdx!==dragIdx){
+      const draggedId=displayedIds[dragIdx];
+      const newVisibleIds=displayedIds.filter(id=>id!==draggedId);
+      newVisibleIds.splice(curIdx,0,draggedId);
+      // Stable merge into the full S.consumers array — only permutes the reorderable
+      // (currently displayed) IDs; anything else (e.g. a soft-deleted consumer) stays
+      // exactly at its original slot.
+      const visibleSet=new Set(displayedIds);
+      const visibleObjs=new Map(S.consumers.filter(x=>visibleSet.has(x.id)).map(x=>[x.id,x]));
+      let cursor=0;
+      S.consumers=S.consumers.map(x=>{
+        if(visibleSet.has(x.id)){
+          const newId=newVisibleIds[cursor++];
+          return visibleObjs.get(newId);
+        }
+        return x;
+      });
+      save();
+    }
+    dragIdx=null;curIdx=null;
+    renderCons();
+  }
+  rows.forEach((row,idx)=>{
+    const handle=row.querySelector('.cons-drag-handle');
+    if(!handle)return;
+    handle.addEventListener('touchstart',e=>onStart(e,idx),{passive:true});
+    handle.addEventListener('mousedown',e=>onStart(e,idx));
+  });
 }
 
 // ── CONSUMER DETAIL ──
@@ -6774,12 +6924,20 @@ function deleteBulkBuyer(id){
 }
 function deleteBulkBuyerConfirmed(){
   const id=bdetDeleteId;
-  S.bulkBuyers=S.bulkBuyers.filter(x=>x.id!==id);
-  S.paneerSales=S.paneerSales.filter(p=>p.buyerId!=='bulk-'+id);
-  S.bulkPayments=S.bulkPayments.filter(p=>p.buyerId!==id);
-  S.buyerPurchases=(S.buyerPurchases||[]).filter(p=>p.buyerId!==id);
-  if(S.openingBalances)delete S.openingBalances['b_'+id];
-  save();closeM('m-del-bulk-confirm');closeM('m-bulk-det');renderBulk();toast('🗑️ Buyer deleted');
+  if(!id){toast('⚠️ Nothing selected to delete');return;}
+  try{
+    S.bulkBuyers=(S.bulkBuyers||[]).filter(x=>x.id!==id);
+    S.paneerSales=(S.paneerSales||[]).filter(p=>p.buyerId!=='bulk-'+id);
+    S.bulkPayments=(S.bulkPayments||[]).filter(p=>p.buyerId!==id);
+    S.buyerPurchases=(S.buyerPurchases||[]).filter(p=>p.buyerId!==id);
+    if(S.openingBalances)delete S.openingBalances['b_'+id];
+    save();
+  }catch(e){
+    console.error('[deleteBulkBuyerConfirmed] failed:',e);
+    toast('⚠️ Delete failed — '+e.message);
+    return; // don't close/re-render on a genuine failure — leaves state visible for diagnosis
+  }
+  closeM('m-del-bulk-confirm');closeM('m-bulk-det');renderBulk();toast('🗑️ Buyer deleted');
 }
 function openBulkPayModal(bid){
   const b=S.bulkBuyers.find(x=>x.id===bid);if(!b)return;
@@ -7184,6 +7342,24 @@ function deleteBulkMonth(bid,mon){
   S.buyerPurchases=S.buyerPurchases.filter(p=>!(p.buyerId===bid&&p.date.startsWith(mon)));
   save();renderBdetContent();renderBulk();toast('🗑️ Month data deleted');
 }
+// ── Manual sort mode for bulk buyers ──
+// Off by default: normal tap-to-open list, in whatever order S.bulkBuyers is in
+// (insertion order today). On: each row gets a drag handle; tap-to-open is disabled
+// while active so an imprecise touch near the handle can't accidentally navigate away.
+let bulkSortMode=false;
+function toggleBulkSort(){
+  bulkSortMode=!bulkSortMode;
+  const btn=document.getElementById('bulk-sort-btn');
+  const hsub=document.getElementById('bulk-hsub');
+  if(btn){
+    btn.textContent=bulkSortMode?'✓':'⇅';
+    btn.style.background=bulkSortMode?'var(--grn)':'';
+    btn.style.color=bulkSortMode?'#fff':'';
+    btn.style.borderColor=bulkSortMode?'var(--grn)':'';
+  }
+  if(hsub) hsub.textContent=bulkSortMode?'Drag ☰ to reorder, then tap ✓ when done':'Tap buyer to view details';
+  renderBulk();
+}
 function renderBulk(){
   const mon=todayMon();
   // Compute all bulk buyer data in one pass
@@ -7194,22 +7370,105 @@ function renderBulk(){
   document.getElementById('bulk-due').textContent='₹'+due.toFixed(0);
   const el=document.getElementById('bulk-list');
   if(!S.bulkBuyers.length){el.innerHTML=`<div class="es"><div class="ei">⭐</div><div class="et">No bulk buyers</div><div class="ex">Tap + to add</div></div>`;return;}
-  el.innerHTML=_bulkData.map(x=>{
+  el.innerHTML=_bulkData.map((x,idx)=>{
     const b=x.b,monBilled=x.monBilled,totalDue=x.bal;
     // Separate milk (L) and paneer (kg) quantities using _prodType
-    const milkQty=S.paneerSales.filter(p=>p.buyerId==='bulk-'+b.id&&p.date.startsWith(mon)&&p._prodType==='milk').reduce((s,p)=>s+p.qty,0);
-    const paneerQty=S.paneerSales.filter(p=>p.buyerId==='bulk-'+b.id&&p.date.startsWith(mon)&&p._prodType==='paneer').reduce((s,p)=>s+p.qty,0);
+    const milkQty=(S.paneerSales||[]).filter(p=>p.buyerId==='bulk-'+b.id&&p.date.startsWith(mon)&&p._prodType==='milk').reduce((s,p)=>s+p.qty,0);
+    const paneerQty=(S.paneerSales||[]).filter(p=>p.buyerId==='bulk-'+b.id&&p.date.startsWith(mon)&&p._prodType==='paneer').reduce((s,p)=>s+p.qty,0);
     // Build a readable qty string: show only what exists, with correct unit
     const qtyParts=[];
     if(milkQty>0)qtyParts.push(milkQty.toFixed(1)+'L 🥛');
     if(paneerQty>0)qtyParts.push(paneerQty.toFixed(1)+'kg 🧀');
     const qtyStr=qtyParts.length?qtyParts.join(' + '):'0';
-    return `<div class="li" onclick="openBulkDet('${b.id}')">
+    if(bulkSortMode){
+      return `<div class="li bulk-sort-row" data-idx="${idx}" style="cursor:default">
+        <div class="bulk-drag-handle" data-idx="${idx}" style="font-size:18px;color:var(--t3);padding:6px 4px;touch-action:none;cursor:grab">☰</div>
+        <div class="av" style="background:${avCol(b.name)}22;color:${avCol(b.name)}">${inits(b.name)}</div>
+        <div class="lin"><div class="lname">${b.name}</div><div class="lsub">${b.phone||'—'}</div></div>
+      </div>`;
+    }
+    return `<div class="li" data-id="${b.id}" onclick="openBulkDet('${b.id}')">
       <div class="av" style="background:${avCol(b.name)}22;color:${avCol(b.name)}">${inits(b.name)}</div>
       <div class="lin"><div class="lname">${b.name}</div><div class="lsub">${b.phone||'—'} • ${qtyStr} this month</div></div>
       <div class="lmeta"><div class="lamt" style="color:${totalDue>0?'var(--cor)':'var(--grn)'}">${totalDue>0?'₹'+totalDue.toFixed(0):'✓'}</div><div class="ldt">₹${monBilled.toFixed(0)} this month</div></div>
     </div>`;
   }).join('');
+  if(bulkSortMode){
+    _attachBulkDragHandlers();
+  } else {
+    // Long-press to edit/delete — same 600ms-hold pattern as consumers/expenses.
+    // Not attached while in sort mode: the drag handle owns touch interaction there,
+    // and a competing long-press timer on the same row would only cause confusion.
+    document.querySelectorAll('#bulk-list .li[data-id]').forEach(row=>{
+      attachBulkLp(row, row.getAttribute('data-id'));
+    });
+  }
+}
+
+// ── Touch-based drag reorder for the bulk buyer list ──
+// Standard sortable-list pattern: rows are visually shifted with CSS transform
+// during the drag (cheap, doesn't touch the DOM structure, so an in-progress touch
+// sequence is never interrupted by a re-render). The actual S.bulkBuyers array is
+// only spliced — and the list only re-rendered — once, on touchend.
+function _attachBulkDragHandlers(){
+  const rows=[...document.querySelectorAll('#bulk-list .bulk-sort-row')];
+  if(!rows.length)return;
+  const rowHeight=rows[0].offsetHeight;
+  let dragIdx=null,curIdx=null,startY=0;
+
+  function onStart(e,idx){
+    dragIdx=idx;curIdx=idx;
+    startY=(e.touches?e.touches[0].clientY:e.clientY);
+    rows[idx].style.position='relative';
+    rows[idx].style.zIndex='50';
+    rows[idx].style.boxShadow='0 4px 14px rgba(0,0,0,.18)';
+    rows[idx].style.background='var(--surf2)';
+    rows[idx].style.borderRadius='var(--rs)';
+    document.addEventListener('touchmove',onMove,{passive:false});
+    document.addEventListener('touchend',onEnd,{passive:true});
+    document.addEventListener('mousemove',onMove);
+    document.addEventListener('mouseup',onEnd);
+  }
+  function onMove(e){
+    if(dragIdx===null)return;
+    if(e.cancelable)e.preventDefault(); // stop page scroll while actively dragging
+    const y=(e.touches?e.touches[0].clientY:e.clientY);
+    const deltaY=y-startY;
+    rows[dragIdx].style.transform=`translateY(${deltaY}px)`;
+    // Which slot would this land in if dropped right now?
+    const rawTarget=dragIdx+Math.round(deltaY/rowHeight);
+    const targetIdx=Math.max(0,Math.min(rows.length-1,rawTarget));
+    if(targetIdx!==curIdx){
+      // Shift every row between the old and new visual position out of the way
+      rows.forEach((r,i)=>{
+        if(i===dragIdx)return;
+        const between=(targetIdx>curIdx)?(i>curIdx&&i<=targetIdx):(i<curIdx&&i>=targetIdx);
+        r.style.transition='transform .12s';
+        r.style.transform=between?`translateY(${targetIdx>curIdx?'-':''}${rowHeight}px)`:'';
+      });
+      curIdx=targetIdx;
+    }
+  }
+  function onEnd(){
+    if(dragIdx===null)return;
+    document.removeEventListener('touchmove',onMove);
+    document.removeEventListener('touchend',onEnd);
+    document.removeEventListener('mousemove',onMove);
+    document.removeEventListener('mouseup',onEnd);
+    if(curIdx!==dragIdx){
+      const [moved]=S.bulkBuyers.splice(dragIdx,1);
+      S.bulkBuyers.splice(curIdx,0,moved);
+      save();
+    }
+    dragIdx=null;curIdx=null;
+    renderBulk(); // single clean re-render reflecting the committed order
+  }
+  rows.forEach((row,idx)=>{
+    const handle=row.querySelector('.bulk-drag-handle');
+    if(!handle)return;
+    handle.addEventListener('touchstart',e=>onStart(e,idx),{passive:true});
+    handle.addEventListener('mousedown',e=>onStart(e,idx));
+  });
 }
 
 // ══════════════════════════════════════
